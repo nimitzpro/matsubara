@@ -3,36 +3,36 @@
 import sqlite3
 import random
 
-conn = sqlite3.connect("new/track_metadata.db")
+conn = sqlite3.connect("data/track_metadata.db")
 
 cur = conn.cursor()
 
-result = cur.execute("SELECT count(*) FROM songs")
+# result = cur.execute("SELECT count(*) FROM songs")
+# print(result.fetchone())
+# def printSong(song): FOR songs table
+#     print(song[6] + " : " + song[3] + " | " + song[1])
 
-print(result.fetchone())
-
-songs = cur.execute("SELECT * FROM songs").fetchall()
-
-def genRandom(randoms, s):
-    r = random.randint(0, s-1)
-    if r in randoms:
-        return genRandom(randoms, s)
-    return r
+def genRandomList(n, s):
+    randoms = []
+    while len(randoms) < n:
+        x = random.randint(0, s-1)
+        if x not in randoms:
+            randoms.append(x)
+    return randoms
 
 def createRandom(n=10, s=1000000):
-    randoms = []
-    playlist = []
-
-    for i in range(0, n):
-        r = genRandom(randoms, s)
-        randoms.append(r)
-
-        playlist.append(songs[r])
+    randoms = genRandomList(n, s)
+    string = "("
+    for r in randoms:
+        string += str(r) + ", "
+    string = string[:len(string)-2:] + ")"
+    
+    playlist = cur.execute("SELECT * FROM songs_simple WHERE id in " + string)
 
     return playlist
 
 def printSong(song):
-    print(song[6] + " : " + song[3] + " | " + song[1])
+    print(song[3] + " : " + song[2] + " | " + song[1])
 
 def printList(playlist):
     for i in playlist:
