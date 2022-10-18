@@ -1,0 +1,36 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage{graphicx}
+
+\begin{document}
+\begin{titlepage}
+   \begin{center}
+       \vspace*{1cm}
+
+       \huge
+       \textbf{matsubara}
+
+       \vspace{1cm}
+
+       \textit{Alexander Stradnic}
+
+        \vspace{3cm}
+
+       \includegraphics[width=0.4\textwidth]{"logo.jpg"}
+
+       \vfill
+
+       Final Year Project
+
+       \vspace*{1cm}
+
+
+   \end{center}
+\end{titlepage}
+
+\section{Introduction}
+My project is on creating playlists using Machine Learning, specifically Maximum Likelihood Inverse Reinforcement Learning. the aim is to produce playlists that listeners would enjoy, based on playlists created and passed to the algorithm beforehand. These playlists or paths are defined by "experts". They differ from standard Reinforcement Learning by not including the weights of the nodes (songs) in the paths, thus leaving it up to the AI to determine the way in which songs were added to each playlist and how they are related to each other in the given playlist, and there are multiple approaches to carrying out Inverse Reinforcement Learning.
+
+\section{Datasets}
+The data was acquired the Million Song Dataset, based on the MusicBrainz repository. Processing was done on the dataset running in SQLite.
+
+\end{document}
