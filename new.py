@@ -151,52 +151,82 @@ def createSimilarities():
             d[a[1]].append(a[2])
 
     artCount = len(d.keys())
-    #print(artCount)
-
     similarities = {}
+    z = ""
     for i_a, a in enumerate(d):
         i_b = i_a + 1
+        if not i_b % 10:
+            cur.execute("INSERT INTO similarities (aid, aid2, similarity) VALUES " + z[:-1] + ";")
+            conn.commit()
+            z = ""
+
         l = list(d.keys())
         while i_b < artCount:
-#            print(a, enumerate(d)[i_b])
-            print(a, l[i_b])
-            #exit()
             j = jaccard(d[a], d[l[i_b]])
-            #print(d[a], "\n", d[l[i_b]])
-            print(str(j))
-            #print(a, l[i_b])
-            #exit()
-            if a in similarities.keys():
-                if l[i_b] in [a2[0] for a2 in similarities[a]]:
-                    i_b += 1
-                    continue
-            if l[i_b] in similarities.keys():
-                if a in [a2[0] for a2 in similarities[l[i_b]]]:
-                    i_b += 1
-                    continue
-
-            if a not in similarities.keys():
-                similarities[a] = [[l[i_b], j]]
-            else:
-                similarities[a].append([l[i_b], j])
-
+            z += "('" + a + "', '" + l[i_b] + "', " + str(j) + "),"
             i_b += 1
 
-            #if i_b > 10:
-            #    break
-
-        #break
-    #print(str(similarities))
-#        print([list(similarities.keys())[i] for i in range(10)])
-
-
-    z = "("
-    for i in similarities:
-        for j in similarities[i]:
-            z += "('" + i + "', '" + j[0] + "', " + str(j[1]) + "),"
-
-    z = z[:-1] + ");"
-
-    cur.execute("INSERT INTO similarities (aid, aid2, similarity) VALUES" + z)
+    if len(z) > 0:
+        cur.execute("INSERT INTO similarities (aid, aid2, similarity) VALUES " + z[:-1] + ";")
+        conn.commit()
 
 createSimilarities()
+
+def createFromSimilarity(title, pair_props=False, n=10):
+    song = cur.execute("SELECT artist_id, artist_name, title FROM songs2 WHERE title LIKE %" + title + "%").fetchone()
+    similar_artists = cur.execute("SELECT aid2 FROM similarities WHERE aid = " + song[0] + "ORDER BY similarity DESC LIMIT " + n).fetchall()
+    similar_artists2 = cur.execute("SELECT aid FROM similarities WHERE aid2 = " + song[0] + "ORDER BY similarity DESC LIMIT " + n).fetchall()
+
+    s = sorted(similar_artists + similar_artists2, key=lambda lst: lst[3])
+
+    if pair_props:
+        avg = 0.0
+        min_sim = 0.0
+        max_sim = 0.0
+        for i in s:
+            avg += i[3]
+            if i[3] > max_sim:
+                max_sim = i[3]
+            if i[3] < min_sim:
+                min_sim = i[3]
+
+        avg /= n
+
+        print("average similarity:", str(avg))
+        print("closest artist:", str(max_sim))
+        print("furthest artist:", str(min_sim))
+
+    return s[:n]
+
+
+
+def createFromSimilarityPairs(title, pair_props=False, n=10):
+    songs = [cur.execute("SELECT artist_id, artist_name, title FROM songs2 WHERE title LIKE %" + title + "%").fetchone()]
+    for i in range(n - 1):
+        similar_artist = cur.execute("SELECT * FROM similarities WHERE aid = " + songs[:-1][0] + "ORDER BY similarity DESC LIMIT 1").fetchone()
+        similar_artist2 = cur.execute("SELECT * FROM similarities WHERE aid2 = " + song[:-1][0] + "ORDER BY similarity DESC LIMIT 1").fetchone()
+        if similar_artist[3] < similar_artist2[3]:
+            songs += [cur.execute("SELECT * FROM songs2 WHERE artist_id = " + similar_artist)]
+        else:
+            songs += [cur.execute("SELECT * FROM songs2 WHERE artist_id = " + similar_artist2)]
+
+    if pair_props:
+        avg = 0.0
+        min_sim = 0.0
+        max_sim = 0.0
+        for i in s:
+            avg += i[3]
+            if i[3] > max_sim:
+                max_sim = i[3]
+            if i[3] < min_sim:
+                min_sim = i[3]
+
+        avg /= n
+        print("average similarity:", str(avg))
+        print("closest artist:", str(max_sim))
+        print("furthest artist:", str(min_sim))
+
+    return str(songs)
+
+
+# print(createFromSimilarityPairs("Sweet Home Alabama", False))

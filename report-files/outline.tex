@@ -1,0 +1,67 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage{graphicx}
+
+\begin{document}
+\begin{titlepage}
+    \begin{center}
+        \vspace*{1cm}
+
+        \huge
+        \textbf{matsubara\\ (PROJECT OUTLINE)}
+
+        \vspace{1cm}
+
+        \textit{Alexander Stradnic}
+
+        \vspace{3cm}
+
+        \includegraphics[width=0.6\textwidth]{"piano.jpg"}
+
+        \vfill
+
+        \textsf{Final Year Project on the Use of Machine Learning for Creating Playlists}
+
+        \vspace{1cm}
+
+        \textbf{University College Cork}
+
+        \vspace*{1cm}
+
+    \end{center}
+\end{titlepage}
+
+\section{Introduction}
+My project is on creating playlists using Recommender Systems, focusing on Maximum Likelihood Inverse Reinforcement Learning.
+The aim is to produce playlists that listeners would enjoy, based on playlists created and passed to the algorithm beforehand.
+
+\paragraph{Inverse Reinforcement Learning(IRL):}
+The playlists or paths are defined by "experts".
+IRL differs from standard Reinforcement Learning by not including the weights of the nodes (songs) in the paths, thus leaving it up to the AI to determine the way in which songs were added to each playlist and how they are related to each other in the given playlist, and there are multiple approaches to carrying out Inverse Reinforcement Learning.
+
+\section{Datasets and Processing}
+The data was acquired the Million Song Dataset, based on the MusicBrainz repository.
+Processing was done on the dataset running in SQLite.
+The processing itself is done using \emph{Python}, with the packages \emph{scikit-learn} and \emph{pandas}.
+
+\section{Testing}
+The main MLIRL algorithm will be tested and compared against other machine learning algorithms, such as other types of reinforcement learning, as well as simpler algorithms based on pseudorandom techniques and similarity comparisons.
+
+\section{Ranking}
+The ranking of the algorithms is planned to be done by survey, using a website. The website front-end will pass user choices to the back-end, which will handle the processing and return the results. Users will be asked to choose genres or artists of their liking, then choose one of three options :
+\begin{itemize}
+    \item{Ask each algorithm to create a new playlist}
+    \item{Choose one song, and ask each algorithm to create a playlist starting from that song}
+    \item{Choose multiple songs, and ask each to extend the playlist}
+\end{itemize}
+
+The results will then be returned to the user, who will then rank each playlist by their own personal preference.
+The rankings will then be stored and analysed.
+
+\section{Future Expansion}
+\begin{enumerate}
+    \item More analysis of the stored rankings would increase the dataset of desired playlists and paths for the improvement of the algorithms.
+    \item Graphing of results would show the performance of the algorithms in a more clear manner, as well as highlight potential trends.
+    \item Possible integration with music playing sites such as \textit{Spotify, Apple Music, Youtube Music, Tidal, etc.} would allow a user to take a generated playlist and add it to their library.
+\end{enumerate}
+
+\end{document}
