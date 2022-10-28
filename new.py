@@ -153,6 +153,13 @@ def createSimilarities():
     artCount = len(d.keys())
     similarities = {}
     z = ""
+
+    start_artist = "AR0RAAC1187FB43692"
+    start_artist_id = list(d.keys()).index(start_artist)
+
+    print(start_artist, str(start_artist_id), artCount)
+    exit()
+
     for i_a, a in enumerate(d):
         i_b = i_a + 1
         if not i_b % 10:
