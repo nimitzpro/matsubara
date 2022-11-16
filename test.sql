@@ -15,12 +15,42 @@ SELECT * FROM songs_simple
 
 select * from artist_term
 
-CREATE TABLE similarities(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    aid TEXT,
-    aid2 TEXT,
-    similarity REAL
-);
+-- CREATE TABLE similarities(
+--     id INTEGER PRIMARY KEY AUTOINCREMENT,
+--     aid TEXT,
+--     aid2 TEXT,
+--     similarity REAL
+-- );
+
+-- CREATE TABLE similarities_mbtags(
+--     id INTEGER PRIMARY KEY AUTOINCREMENT,
+--     aid TEXT,
+--     aid2 TEXT,
+--     similarity REAL
+-- );
+
+SELECT * FROM similarities_mbtags;
+
+-- DROP TABLE similarities;
+-- SELECT count(*) FROM similarities WHERE similarity = 0.0;
+-- DELETE FROM similarities
+-- WHERE similarity = 0.0;
+select * from similarities limit 30;
+SELECT count(*) from similarities;
+
+SELECT * FROM similarities WHERE aid = 'ARGU8JD1187B9AA1DA' ORDER BY similarity DESC LIMIT 10
+SELECT * FROM similarities WHERE aid = 'ARGU8JD1187B9AA1DA' LIMIT 1
+
+select * from similarities where aid2 = "ARZZZAI124207819C9" limit 20;
+select * from similarities where id = (select max(id) from similarities);
+
+
+
+SELECT artist_id, artist_name, title FROM songs2 WHERE title LIKE "Sweet Home Alabama" LIMIT 1
+
+select * from songs2 where artist_id = (select max(artist_id) from songs2);
+select distinct artist_id from songs2 order by artist_id desc limit 5;
+SELECT DISTINCT artist_id FROM songs2 where id >= 295929532;
 
 select artist_id, term from a_term group by artist_id
 
@@ -30,11 +60,21 @@ select artist_id, term from a_term group by artist_id
 --     artist_id TEXT,
 --     term TEXT
 -- );
-
 --  MOVE TABLE BETWEEN FILES
 -- ATTACH DATABASE "data/track_metadata.db" AS other;
 -- INSERT INTO other.a_term
 -- SELECT * FROM artist_term;
+-- DETACH other;
+
+-- CREATE TABLE a_mbtag(
+--     id INTEGER PRIMARY KEY AUTOINCREMENT,
+--     artist_id TEXT,
+--     mbtag TEXT
+-- );
+--  MOVE TABLE BETWEEN FILES
+-- ATTACH DATABASE "C:\Users\astro\Documents\matsubara\data\track_metadata.db" AS other;
+-- INSERT INTO other.a_mbtag (artist_id, mbtag)
+-- SELECT * FROM artist_mbtag;
 -- DETACH other;
 
 -- Schema Layout
@@ -43,6 +83,7 @@ select artist_id, term from a_term group by artist_id
 -- select * from a_term
 -- List Tables
 .tables
+
 
 select count(*) from songs2 where year IS NULL or year = 0
 
