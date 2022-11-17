@@ -350,7 +350,7 @@ def createFromSimilarityPairsCombined(artist_name="", title="", pair_props=False
         similar_artist = cur.execute(f"SELECT * FROM similarities WHERE aid = '{songs[-1][0]}' AND aid2 NOT IN ({artist_ids}) ORDER BY similarity DESC LIMIT 1").fetchone()
         similar_artist2 = cur.execute(f"SELECT * FROM similarities WHERE aid2 = '{songs[-1][0]}' AND aid NOT IN ({artist_ids}) ORDER BY similarity DESC LIMIT 1").fetchone()
 
-        similar_artist_mbtags = cur.execute(f"SELECT * FROM similarities WHERE aid = '{songs[-1][0]}' AND aid2 NOT IN ({artist_ids}) ORDER BY similarity DESC LIMIT 1").fetchone()
+        similar_artist_mbtags = cur.execute(f"SELECT * FROM similarities_mbtags WHERE aid = '{songs[-1][0]}' AND aid2 NOT IN ({artist_ids}) ORDER BY similarity DESC LIMIT 1").fetchone()
         similar_artist2_mbtags = cur.execute(f"SELECT * FROM similarities_mbtags WHERE aid2 = '{songs[-1][0]}' AND aid NOT IN ({artist_ids}) ORDER BY similarity DESC LIMIT 1").fetchone()
         print(str(similar_artist), str(similar_artist_mbtags))
         print(str(similar_artist2), str(similar_artist2_mbtags))
