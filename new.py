@@ -370,7 +370,7 @@ def createFromSimilarityPairsCombined(artist_name="", title="", pair_props=False
         
         ideal_song = max(artist_options, key=lambda x: x[3])
         songs.append(cur.execute("SELECT artist_id, artist_name, title FROM songs2 WHERE artist_id = '" + ideal_song[1] + "' LIMIT 1;").fetchone())
-        artist_ids += f", '{ideal_song[1]}'"
+        artist_ids += f", '{ideal_song[0]}'"
         s.append(ideal_song)
 
     if pair_props:
