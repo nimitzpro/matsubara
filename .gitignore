@@ -6,3 +6,6 @@ data_backup/
 *.fls
 *.log
 *.synctex.gz
+
+**/secrets.txt
+**/.cache
