@@ -134,7 +134,7 @@ select count(*) from songs2 where year IS NULL or year = 0
 --     shs_work) select * from songs
 
 -- drop table songs2
--- select * from songs2
+select count(year) from songs2 where year <> 0
 
 -- CREATE TABLE songs_simple(
 --     id INTEGER PRIMARY KEY AUTOINCREMENT,
