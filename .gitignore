@@ -6,3 +6,8 @@ data_backup/
 *.fls
 *.log
 *.synctex.gz
+*.bbl
+*.bcf
+*.blg
+*.run.xml
+*.toc

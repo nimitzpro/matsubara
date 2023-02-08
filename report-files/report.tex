@@ -1,5 +1,7 @@
 \documentclass[a4paper, 12pt]{article}
 \usepackage{graphicx}
+\usepackage{biblatex}
+\addbibresource{references.bib}
 
 \begin{document}
 \begin{titlepage}
@@ -11,16 +13,19 @@
 
        \vspace{1cm}
 
-       \textit{Alexander Stradnic}
+       Final Year Project on the use of Machine Learning for creating Playlists
 
         \vspace{3cm}
 
-       \includegraphics[width=0.4\textwidth]{"logo.jpg"}
+       \includegraphics[width=0.6\textwidth]{"piano.jpg"}
 
        \vfill
 
-       \textsf{Final Year Project on the use of Machine Learning for creating Playlists}
+       \textit{Alexander Stradnic}
 
+       \vspace{1cm}
+       
+       University College Cork
 
        \vspace*{1cm}
 
@@ -28,15 +33,43 @@
    \end{center}
 \end{titlepage}
 
+\tableofcontents
+\newpage
+
 \section{Introduction}
-My project is on creating playlists using Recommender Systems, specifically Maximum Likelihood Inverse Reinforcement Learning.
-The aim is to produce playlists that listeners would enjoy, based on playlists created and passed to the algorithm beforehand.
-These playlists or paths are defined by "experts".
-They differ from standard Reinforcement Learning by not including the weights of the nodes (songs) in the paths, thus leaving it up to the AI to determine the way in which songs were added to each playlist and how they are related to each other in the given playlist, and there are multiple approaches to carrying out Inverse Reinforcement Learning.
+My project studies the creation of playlists with the help of Recommender Systems, specifically using Maximum Likelihood Inverse Reinforcement Learning.
+The aim is to produce playlists that listeners would enjoy, based on training from Spotify's Million Playlist Dataset.
+
+\paragraph{Inverse Reinforcement Learning(IRL):}
+The playlists or paths are defined by "experts".
+IRL differs from standard Reinforcement Learning by not including the weights of the nodes (songs) in the paths, thus leaving it up to the AI to determine the way in which songs were added to each playlist and how they are related to each other in the given playlist, and there are multiple approaches to carrying out Inverse Reinforcement Learning.
+
+\paragraph*{Maximum Likelihood Inverse Reinforcement Learning(MLIRL):}
+A variation of IRL which combines concepts from other IRL methods.
+Like Bayesian IRL, it adopts a probability model that uses $\theta_{A}$ to create a value function and then assumes the
+expert randomizes at the level of individual action choices. Like Maximum
+Entropy IRL, it seeks a maximum likelihood model. Like Policy matching, it
+uses a gradient method to find optimal behavior.\cite{mlirl-def}
 
 \section{Datasets}
 The data was acquired the Million Song Dataset, based on the MusicBrainz repository.
 Processing was done on the dataset running in SQLite.
-The processing itself is done using \emph{Python}, with the packages \emph{scikit-learn} and \emph{pandas}.
+Playlists for training the IRL algorithms are procured from Spotify's Million Playlist Dataset.
+The processing itself is done using \emph{Python}, with the packages \emph{scikit-learn}, \emph{keras}, \emph{pandas} and \emph{numpy}.
+
+\section{Playlist Generation}
+\subsection{Algorithmic}
+discuss random generators
+\subsection{Machine Learning}
+discuss mlirl and alts here
+
+\section{Testing Environment}
+The different algorithms were then tested in the real world. This was done using a website where users would enter 5 songs,
+and the algorithms would each extend the playlist in their own way. The user then chooses a favourite list and possibly ranks each based on different parameters.
+
+\section{Conclusions}
+conclusions
+
+\printbibliography
 
 \end{document}
