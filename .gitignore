@@ -1,4 +1,4 @@
-data/
+data/**/*
 data_backup/
 *.aux
 *.dvi
@@ -12,5 +12,4 @@ data_backup/
 *.run.xml
 *.toc
 
-!/data/mpd/src
-!/data/mpd/data/mpd.slice.0-999.json
+!data/mpd/data/mpd.slice.0-999.json
