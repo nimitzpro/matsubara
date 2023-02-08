@@ -11,3 +11,6 @@ data_backup/
 *.blg
 *.run.xml
 *.toc
+
+!/data/mpd/src
+!/data/mpd/data/mpd.slice.0-999.json
