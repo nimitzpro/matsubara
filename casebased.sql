@@ -136,3 +136,12 @@ select * from tracks where track_uri = 'spotify:track:57JRZbE80MLsYbmb24cPee'
 SELECT count(DISTINCT track_uri) FROM playlist_tracks WHERE pid in ('525966','261994','735199','939549','108724','251912','852548','324328','913938','87573','850610','306768','838831','497929','80262','732551','594659','863062');
 
 
+select count(track_uri) from tracks where artist_uri in (select distinct artist_uri from artist_genres) -- count songs with artists that contain genres
+
+create table similarities(
+    artist_uri TEXT,
+    artist_uri2 TEXT,
+    similarity REAL
+);
+
+.tables
