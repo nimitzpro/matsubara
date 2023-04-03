@@ -17,67 +17,72 @@ conn = sqlite3.connect("Z:/spotify.db")
 cur = conn.cursor()
 path = "data/mpd/data/"
 filenames = os.listdir(path)
-for i, filename in enumerate(sorted(filenames)):
-    if filename.startswith("mpd.slice.") and filename.endswith(".json"):
+def gen_tracks():
+    for i, filename in enumerate(sorted(filenames)):
+        if filename.startswith("mpd.slice.") and filename.endswith(".json"):
 
-        # file = open(path+filename, "r")
-        # data = "".join(file.readlines())
-        # data = re.sub("'+", "''", data)
-        # data = re.sub("\"", "\u0022", data)
-        # file.close()
-        # file = open(path+filename, "w")
-        # file.write(data)
+            # file = open(path+filename, "r")
+            # data = "".join(file.readlines())
+            # data = re.sub("'+", "''", data)
+            # data = re.sub("\"", "\u0022", data)
+            # file.close()
+            # file = open(path+filename, "w")
+            # file.write(data)
 
-        print("processing", filename)
+            print("processing", filename)
 
-        data = json.load(open(path+filename))
-        playlists = pd.DataFrame(data["playlists"])
+            data = json.load(open(path+filename))
+            playlists = pd.DataFrame(data["playlists"])
 
-        songs = np.concatenate([["('"+song['track_uri']+"', '"+escape(song['track_name'])+"', '"+song['artist_uri']+"', '"+escape(song['artist_name'])+"', '"+song['album_uri']+"', '"+escape(song['album_name'])+"', '"+str(song["duration_ms"])+"')" for song in playlist] for playlist in playlists["tracks"]]).tolist()
-        
-        songs = ", ".join([song for song in songs])
-        # print(songs[:800])
+            songs = np.concatenate([["('"+song['track_uri']+"', '"+escape(song['track_name'])+"', '"+song['artist_uri']+"', '"+escape(song['artist_name'])+"', '"+song['album_uri']+"', '"+escape(song['album_name'])+"', '"+str(song["duration_ms"])+"')" for song in playlist] for playlist in playlists["tracks"]]).tolist()
 
-        cur.execute('INSERT OR IGNORE INTO tracks (track_uri, track_name, artist_uri, artist_name, album_uri, album_name, duration_ms) VALUES ' + songs + ';')
-        conn.commit()
+            songs = ", ".join([song for song in songs])
+            # print(songs[:800])
 
+            cur.execute('INSERT OR IGNORE INTO tracks (track_uri, track_name, artist_uri, artist_name, album_uri, album_name, duration_ms) VALUES ' + songs + ';')
+            conn.commit()
+# gen_tracks()
 
 def collab(l):
     if l == "true":
         return 1
     return 0
 
-# for i, filename in enumerate(sorted(filenames)):
-#     if filename.startswith("mpd.slice.") and filename.endswith(".json"):
-#         print("processing", filename)
-#         data = json.load(open(path+filename))
-#         playlists = pd.DataFrame(data["playlists"])
+def gen_playlists():
+    for i, filename in enumerate(sorted(filenames)):
+        if filename.startswith("mpd.slice.") and filename.endswith(".json"):
+            print("processing", filename)
+            data = json.load(open(path+filename))
+            playlists = pd.DataFrame(data["playlists"])
 
-#         playlists = [[str(playlists['pid'][p]), escape(playlists['name'][p]), str(collab(playlists['collaborative'][p])), str(playlists['num_tracks'][p]), str(playlists['num_albums'][p]), str(playlists["num_followers"][p])] for p in range(len(playlists))]
-#         playlists = ", ".join(["(" + ", ".join(['"'+attr+'"' for attr in l]) + ")" for l in playlists])
-#         # print(playlists)
-#         # f = open("playlists.txt", "w", encoding="utf-8")
-#         # f.write(playlists)
-#         # f.close()
-#         # break
+            playlists = [[str(playlists['pid'][p]), escape(playlists['name'][p]), str(collab(playlists['collaborative'][p])), str(playlists['num_tracks'][p]), str(playlists['num_albums'][p]), str(playlists["num_followers"][p])] for p in range(len(playlists))]
+            playlists = ", ".join(["(" + ", ".join(['"'+attr+'"' for attr in l]) + ")" for l in playlists])
+            # print(playlists)
+            # f = open("playlists.txt", "w", encoding="utf-8")
+            # f.write(playlists)
+            # f.close()
+            # break
 
-#         cur.execute('INSERT OR IGNORE INTO playlists (pid, name, collaborative, num_tracks, num_albums, num_followers) VALUES ' + playlists + ';')
-#         conn.commit()
+            cur.execute('INSERT OR IGNORE INTO playlists (pid, name, collaborative, num_tracks, num_albums, num_followers) VALUES ' + playlists + ';')
+            conn.commit()
+# gen_playlists()
 
+def gen_playlist_tracks():
+    for i, filename in enumerate(sorted(filenames)):
+        if filename.startswith("mpd.slice.") and filename.endswith(".json"):
+            print("processing", filename)
 
-# for i, filename in enumerate(sorted(filenames)):
-#     if filename.startswith("mpd.slice.") and filename.endswith(".json"):
-#         print("processing", filename)
+            data = json.load(open(path+filename))
+            playlists = pd.DataFrame(data["playlists"])
 
-#         data = json.load(open(path+filename))
-#         playlists = pd.DataFrame(data["playlists"])
+            songs = np.concatenate([["('"+str(playlists["pid"][index])+"', '"+str(song['pos'])+"', '"+song['track_uri']+"')" for song in playlist] for index, playlist in enumerate(playlists["tracks"])]).tolist()
 
-#         songs = np.concatenate([["('"+str(playlists["pid"][index])+"', '"+str(song['pos'])+"', '"+song['track_uri']+"')" for song in playlist] for index, playlist in enumerate(playlists["tracks"])]).tolist()
-        
-#         songs = ", ".join([song for song in songs])
+            songs = ", ".join([song for song in songs])
 
-#         cur.execute('INSERT INTO playlist_tracks (pid, pindex, track_uri) VALUES ' + songs + ';')
-#         conn.commit()
+            cur.execute('INSERT INTO playlist_tracks (pid, pindex, track_uri) VALUES ' + songs + ';')
+            conn.commit()
+# gen_playlist_tracks()
+
 
 '''slowww'''
 # cur.execute('BEGIN TRANSACTION;')
@@ -104,8 +109,6 @@ def collab(l):
 
 # conn.commit()
 # cur.execute('END TRANSACTION;')
-
-
 
 # OLD CODE DOESN'T RESPECT ORDER - got to 298000 in spotify.db
 # playlists = cur.execute("SELECT pid, num_tracks FROM playlists;").fetchall()

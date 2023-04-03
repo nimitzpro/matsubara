@@ -25,7 +25,7 @@ occ = {}
 song1_i = {}
 occ_i = {}
 
-''' processed up to 40000 '''
+''' processed up to 40000 - too slow so switched to seq2_simple gen'''
 
 songs = cur.execute(f"SELECT * from playlist_tracks ORDER BY pid ASC, pindex ASC;").fetchall()
 for i in range(len(songs) - 1):

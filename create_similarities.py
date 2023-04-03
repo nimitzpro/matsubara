@@ -199,4 +199,4 @@ def createSimilarities():
 
     cur.execute("INSERT INTO similarities (aid, aid2, similarity) VALUES" + z)
 
-createSimilarities()
+# createSimilarities()
