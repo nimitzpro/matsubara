@@ -3,6 +3,8 @@ import numpy as np
 from multiprocessing import Pool
 from collections import Counter
 
+db_path = "Z:\\other\\spotify_backup.db"
+
 def var_attr(l, gamma, delta):
     mul_attr = 1
     i = 0
@@ -18,12 +20,12 @@ def var_attr(l, gamma, delta):
     return mul_attr
 
 def fetch(x):
-    con = sqlite3.connect("Z:\\other\\spotify_backup.db", check_same_thread=False)
+    con = sqlite3.connect(db_path, check_same_thread=False)
     c = con.cursor()
     return c.execute(f"SELECT pid, track_uri FROM playlist_tracks WHERE {x} ORDER BY pid;").fetchall()
 
 def batch_phi(songs, t, pre):
-    con = sqlite3.connect("Z:\\other\\spotify_backup.db", check_same_thread=False)
+    con = sqlite3.connect(db_path, check_same_thread=False)
     c = con.cursor()
     Q_s = "(" + ",".join(["'"+i+"'" for i in songs]) + ")" # song uris
     if not pre:
@@ -33,7 +35,7 @@ def batch_phi(songs, t, pre):
     return phis
 
 def batch_rel(setting, fetched_tracks, t):
-    con = sqlite3.connect("Z:\\other\\spotify_backup.db", check_same_thread=False)
+    con = sqlite3.connect(db_path, check_same_thread=False)
     c = con.cursor()
     Q = fetched_tracks
     Q_s = "(" + ",".join(["'"+i+"'" for i in Q[1]]) + ")" # song uris
@@ -72,11 +74,11 @@ def slim_var(song_features): # todo: fine-tuning deltas and gammas
         total *= attr
     return total
 
-def check_batch(x, y, best_playlists, pre):
+def check_batch(x, y, pre, best_playlists):
     '''
     Check whether sequence <x, y> occurs in any of the k retrieved playlists and count them where either x is the song in the playlist and y is a list of candidates or the other way round. Returns list of candidates, occurence count for each is almost always at most 1 so was removed
     '''
-    conn = sqlite3.connect("Z:\\other\\spotify_backup.db", check_same_thread=False)
+    conn = sqlite3.connect(db_path, check_same_thread=False)
     c = conn.cursor()
     if pre:
         return c.execute(f"SELECT p1.track_uri FROM playlist_tracks as p1 JOIN playlist_tracks as p2 WHERE p1.track_uri in ({x}) AND p2.track_uri = '{y}' AND p1.pid = p2.pid AND p1.pid in ({best_playlists}) AND p2.pindex - 1 = p1.pindex GROUP BY p1.track_uri;").fetchall()
@@ -104,14 +106,18 @@ def create_successors(css, cp, t, pre, best_playlists):
     successors_buffer = []
     if tracks:
         for track in tracks:
-            successor_playlist = [track[0]] + cp
-            successors_buffer.append([successor_playlist, pre[0], True])
+            if pre:
+                successor_playlist = [track[0]] + cp
+                successors_buffer.append([successor_playlist, track[0], pre])
+            else:
+                successor_playlist = cp + [track[0]]
+                successors_buffer.append([successor_playlist, track[0], pre])
             buffer.append(track[0])
 
     return successors_buffer, buffer
 
-def case(seed, N=10, k=20):
-    conn = sqlite3.connect("Z:\\other\\spotify_backup.db", check_same_thread=False)
+def main(seed, N=10, k=20):
+    conn = sqlite3.connect(db_path, check_same_thread=False)
     cur = conn.cursor()
 
     containing = cur.execute(f"SELECT pid, pindex FROM playlist_tracks WHERE track_uri = '{seed}';").fetchall()
@@ -127,9 +133,11 @@ def case(seed, N=10, k=20):
     for x in range(0, len(after_cases), 900):
         after_split.append("OR".join(after_cases[x:x+900]))
 
+
+    print("fetching tracks...")
     fetched_prev_tracks = []
     fetched_after_tracks = []
-    with Pool(64) as p:
+    with Pool(32) as p:
         fetched_prev_tracks = p.map_async(fetch, prev_split)
         fetched_after_tracks = p.map_async(fetch, after_split)
         p.close()
@@ -138,7 +146,9 @@ def case(seed, N=10, k=20):
     fpt = np.transpose([item for sublist in fetched_prev_tracks.get() for item in sublist])
     fat = np.transpose([item for sublist in fetched_after_tracks.get() for item in sublist])
 
-    with Pool(64) as p:
+    print("calculating relevances...")
+
+    with Pool(32) as p:
         t2, t3 = p.starmap(batch_rel, [[0,fpt,seed], [1,fat,seed]])
         p.close()
         p.join()
@@ -157,7 +167,9 @@ def case(seed, N=10, k=20):
         else:
             playlist_features[int(song[0])].append((song[1],song[2],song[3],song[4],song[5]))
 
-    with Pool(64) as p:
+    print("calculating variances...")
+
+    with Pool(32) as p:
         variances = p.map(slim_var,[playlist_features[int(pid)] for pid in tr_tuples_sorted[0]])
         p.close()
         p.join()
@@ -182,6 +194,10 @@ def case(seed, N=10, k=20):
     for song in song_popularity:
         song_p[song[0]] = int(song[1])
 
+    print(f"generating playlist from {k} input playlists...")
+    # print(candidate_songs_str)
+
+    # print(best_k_playlists_string)
 
     while len(current_playlist) < N:
         t = current_playlist[0]
@@ -189,28 +205,31 @@ def case(seed, N=10, k=20):
         successors_of_current_playlist = []
         candidate_songs_str = ",".join(["'"+c+"'" for c in candidate_songs if c not in current_playlist])
 
-        with Pool(64) as p:
+        with Pool(32) as p:
             pre_buffer, post_buffer = p.starmap(create_successors, [[candidate_songs_str, current_playlist, t, True, best_k_playlists_string], [candidate_songs_str, current_playlist, T, False, best_k_playlists_string]])
             p.close()
             p.join()
 
         successors_of_current_playlist = pre_buffer[0] + post_buffer[0]
+
         if len(successors_of_current_playlist) == 0:
             # discard current_playlist
             return "failed to create playlist"
         else: # pop new current_playlist from candidate_playlists
-            with Pool(64) as p:
+            with Pool(32) as p:
                 phis_pres, phis_posts = p.starmap(batch_phi, [[pre_buffer[1], current_playlist[0], True], [post_buffer[1], current_playlist[-1], False]])
+                p.close()
+                p.join()
 
             succ_data = []
-            for i, succ in enumerate(successors_of_current_playlist):
+            for succ in successors_of_current_playlist:
                 if succ[2]:
                     phi = phis_pres[succ[1]]
                 else:
                     phi = phis_posts[succ[1]]
                 succ_data.append((phi, song_p[succ[1]], [song_f[x] for x in succ[0]]))
 
-            with Pool(64) as p:
+            with Pool(32) as p:
                 ratings = p.starmap(h, succ_data)
                 p.close()
                 p.join()
@@ -219,7 +238,9 @@ def case(seed, N=10, k=20):
                 successors_of_current_playlist[i].append(ratings[i])
 
             successors_of_current_playlist = sorted(successors_of_current_playlist, key=lambda x: x[3], reverse=True)
-            # print(successors_of_current_playlist)
             current_playlist = successors_of_current_playlist[0][0]
 
     return current_playlist
+
+if __name__ == "__main__":
+    print(main("spotify:track:3mScGCzxiXA9OaHdBeuk7O"))

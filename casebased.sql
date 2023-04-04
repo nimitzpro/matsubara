@@ -34,6 +34,8 @@ create table playlists(
 
 -- DROP table tracks;
 
+select distinct count(*) from tracks;
+
 SELECT DISTINCT * FROM tracks limit 0, 20;
 
 select count(*) from playlist_tracks;
@@ -143,5 +145,9 @@ create table similarities(
     artist_uri2 TEXT,
     similarity REAL
 );
-
 .tables
+select count(*) from similarities
+
+select * from similarities order by similarity desc limit 100
+
+-- select count(*) from seq2_simple where track_uri1 = 'spotify:track:0KKkJNfGyhkQ5aFogxQAPU' AND track_uri2 = 'spotify:track:5meZvaHT6pQx4AZP1f8lN3'

@@ -6,7 +6,7 @@ import random
 conn = sqlite3.connect("Z:\\other\\spotify_backup.db")
 cur = conn.cursor()
 
-trackN = 2262292
+trackN = 2262292 # total tracks in DB
 
 def genRandomList(n, s):
     randoms = []
@@ -22,25 +22,20 @@ def genRandomListString(n=10, s=trackN):
     for r in randoms:
         string += str(r) + ", "
     string = string[:len(string)-2:] + ")"
-
     return string
 
-def createRandom():
-    string = genRandomListString()
-    playlist = cur.execute("SELECT track_uri FROM tracks WHERE row_id in " + string)
-    return playlist
+def createRandom(amount=10):
+    string = genRandomListString(n=amount)
+    return [s[0] for s in cur.execute("SELECT track_uri FROM tracks WHERE rowid in " + string).fetchall()]
 
+def createFromSameArtist(artist, amount=10):
+    return [s[0] for s in cur.execute(f"SELECT track_uri FROM tracks WHERE artist_name LIKE '%{artist}%' LIMIT {amount}").fetchall()]
 
-def createFromSameArtist(artist):
-    playlist = cur.execute("SELECT * FROM songs_simple WHERE artist_name LIKE '" + artist + "'")
-    return playlist
+def createFromContainingTitle(title, amount=10):
+    return [s[0] for s in cur.execute(f"SELECT track_uri FROM tracks WHERE track_name LIKE '%{title}%' LIMIT {amount}").fetchall()]
 
-def createFromContainingTitle(title):
-    playlist = cur.execute("SELECT * FROM songs_simple WHERE title LIKE '%" + title + "%'")
-    return playlist
-
-def findSongsByWord(word, artist_name="", amount=20):
-     return cur.execute("SELECT * FROM songs_simple WHERE title LIKE '%" + word + "%' AND (title <> '" + word + "' OR artist_name <> '"+ artist_name + "') LIMIT "+ str(amount)).fetchall()
+def findSongsByWord(word, artist_name="", amount=10):
+     return [s[0] for s in cur.execute("SELECT track_uri FROM tracks WHERE track_name LIKE '%" + word + "%' AND (track_name <> '" + word + "' OR artist_name <> '"+ artist_name + "') LIMIT "+ str(amount)).fetchall()]
 
 
 def createFromTitleWord(word, case=0, n=10):
@@ -131,11 +126,10 @@ def createSimilarities():
             d[a[0]].append(a[1])
 
     artCount = len(d.keys())
-    similarities = {}
     z = ""
     for i_a, a in enumerate(d):
         i_b = i_a + 1
-        if not i_b % 10:
+        if not i_b % 1000:
             cur.execute("INSERT INTO similarities (artist_uri, artist_uri2, similarity) VALUES " + z[:-1] + ";")
             conn.commit()
             z = ""
@@ -147,8 +141,8 @@ def createSimilarities():
                 z += "('" + a + "', '" + l[i_b] + "', " + str(j) + "),"
             i_b += 1
 
-        if not i_b % 1000:
-            print(i_b + " / " + artCount + "...")
+        if not i_a % 1000:
+            print(str(i_a)+ " / " + str(artCount) + "...")
 
     if len(z) > 0:
         cur.execute("INSERT INTO similarities (artist_uri, artist_uri2, similarity) VALUES " + z[:-1] + ";")
@@ -157,22 +151,22 @@ def createSimilarities():
 # createSimilarities()
 
 def createFromSimilarity(title, pair_props=False, n=10):
-    song = cur.execute("SELECT artist_uri, artist_name, title FROM tracks WHERE title LIKE %" + title + "%").fetchone()
+    song = cur.execute("SELECT artist_uri, artist_name, title FROM tracks WHERE track_name LIKE %" + title + "%").fetchone()
     similar_artists = cur.execute("SELECT artist_uri2 FROM similarities WHERE artist_uri = " + song[0] + "ORDER BY similarity DESC LIMIT " + n).fetchall()
     similar_artists2 = cur.execute("SELECT artist_uri FROM similarities WHERE artist_uri2 = " + song[0] + "ORDER BY similarity DESC LIMIT " + n).fetchall()
 
-    s = sorted(similar_artists + similar_artists2, key=lambda lst: lst[3])
+    s = sorted(similar_artists + similar_artists2, key=lambda lst: lst[2])
 
     if pair_props:
         avg = 0.0
         min_sim = 0.0
         max_sim = 0.0
         for i in s:
-            avg += i[3]
-            if i[3] > max_sim:
-                max_sim = i[3]
-            if i[3] < min_sim:
-                min_sim = i[3]
+            avg += i[2]
+            if i[2] > max_sim:
+                max_sim = i[2]
+            if i[2] < min_sim:
+                min_sim = i[2]
 
         avg /= n
 
@@ -184,7 +178,7 @@ def createFromSimilarity(title, pair_props=False, n=10):
 
 def createFromSimilarityPairs(artist_name="", title="", pair_props=False, n=10):
     songs = []
-    songs.append(cur.execute(f"SELECT artist_uri, track_uri FROM tracks WHERE title LIKE '%{title}%' AND artist_name LIKE '%{artist_name}%'").fetchone())
+    songs.append(cur.execute(f"SELECT artist_uri, track_uri FROM tracks WHERE track_name LIKE '%{title}%' AND artist_name LIKE '%{artist_name}%'").fetchone())
     artist_uris = f"'{songs[0][0]}'"
     s = []
     for i in range(n - 1):
@@ -195,34 +189,34 @@ def createFromSimilarityPairs(artist_name="", title="", pair_props=False, n=10):
         if not similar_artist:
             if not similar_artist2:
                 return str(songs)
-            songs.append(cur.execute("SELECT artist_uri FROM tracks WHERE artist_uri = '" + similar_artist2[0] + "' LIMIT 1;").fetchone())
+            songs.append(cur.execute("SELECT artist_uri, track_uri FROM tracks WHERE artist_uri = '" + similar_artist2[0] + "' ORDER BY RANDOM() LIMIT 1;").fetchone())
             artist_uris += f", '{similar_artist2[0]}'"
             s.append(similar_artist2)
             continue
         if not similar_artist2:
-            songs.append(cur.execute("SELECT artist_uri FROM tracks WHERE artist_uri = '" + similar_artist[1] + "' LIMIT 1;").fetchone())
+            songs.append(cur.execute("SELECT artist_uri, track_uri FROM tracks WHERE artist_uri = '" + similar_artist[1] + "' ORDER BY RANDOM() LIMIT 1;").fetchone())
             artist_uris += f", '{similar_artist[1]}'"
             s.append(similar_artist)
             continue
 
         if similar_artist[2] > similar_artist2[2]:
-            songs.append(cur.execute("SELECT artist_uri FROM tracks WHERE artist_uri = '" + similar_artist[1] + "' LIMIT 1;").fetchone())
+            songs.append(cur.execute("SELECT artist_uri, track_uri FROM tracks WHERE artist_uri = '" + similar_artist[1] + "' ORDER BY RANDOM() LIMIT 1;").fetchone())
             artist_uris += f", '{similar_artist[1]}'"
             s.append(similar_artist)
         else:
-            songs.append(cur.execute("SELECT artist_uri FROM tracks WHERE artist_uri = '" + similar_artist2[0] + "' LIMIT 1;").fetchone())
+            songs.append(cur.execute("SELECT artist_uri, track_uri FROM tracks WHERE artist_uri = '" + similar_artist2[0] + "' ORDER BY RANDOM() LIMIT 1;").fetchone())
             artist_uris += f", '{similar_artist2[0]}'"
             s.append(similar_artist2)
 
     if pair_props:
         avg = 0.0
-        min_sim = (0, "", "", 1.0)
-        max_sim = (0, "", "", 0.0)
+        min_sim = ("", "", 1.0)
+        max_sim = ("", "", 0.0)
         for i in s:
-            avg += i[3]
-            if i[3] > max_sim[3]:
+            avg += i[2]
+            if i[2] > max_sim[2]:
                 max_sim = i
-            if i[3] < min_sim[3]:
+            if i[2] < min_sim[2]:
                 min_sim = i
         avg /= n
         print("average similarity:", str(avg))
@@ -231,4 +225,6 @@ def createFromSimilarityPairs(artist_name="", title="", pair_props=False, n=10):
 
     return [s[1] for s in songs]
 
-# print(createFromSimilarityPairs("yes", "roundabout", True))
+print(createRandom())
+
+# print(createFromSimilarityPairs("britney spears", "toxic", True))
