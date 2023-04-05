@@ -1,35 +1,33 @@
-@import './base.css';
+* {
+  padding: 0 0;
+  margin: 0 0;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+body {
+  font-size: 16px;
+  background-image: url(https://images.pexels.com/photos/210764/pexels-photo-210764.jpeg);
+  background-size: cover;
+}
 
 #app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-
-  font-weight: normal;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65));
+  min-width: 100vw;
+  color: white;
+  
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
+a, header h1 {
+  color: #BCC6FF;
+  transition: all 0.25s ease;
+}
+a:hover, #banner:hover h1{
+  color: #0096FF;
 }
 
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
-}
-
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
-
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
-}
+/* lightblue: BCC6FF
+purple: BF00FF
+blue: 0096FF */
