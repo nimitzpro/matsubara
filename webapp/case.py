@@ -137,7 +137,7 @@ def main(seed, N=10, k=20):
     # print("fetching tracks...")
     fetched_prev_tracks = []
     fetched_after_tracks = []
-    with Pool(4) as p:
+    with Pool(32) as p:
         fetched_prev_tracks = p.map_async(fetch, prev_split)
         fetched_after_tracks = p.map_async(fetch, after_split)
         p.close()
@@ -146,9 +146,10 @@ def main(seed, N=10, k=20):
     fpt = np.transpose([item for sublist in fetched_prev_tracks.get() for item in sublist])
     fat = np.transpose([item for sublist in fetched_after_tracks.get() for item in sublist])
 
-    # print("calculating relevances...")
+    print("calculating relevances...")
+    print(fpt)
 
-    with Pool(4) as p:
+    with Pool(32) as p:
         t2, t3 = p.starmap(batch_rel, [[0,fpt,seed], [1,fat,seed]])
         p.close()
         p.join()
@@ -205,7 +206,7 @@ def main(seed, N=10, k=20):
         successors_of_current_playlist = []
         candidate_songs_str = ",".join(["'"+c+"'" for c in candidate_songs if c not in current_playlist])
 
-        with Pool(4) as p:
+        with Pool(32) as p:
             pre_buffer, post_buffer = p.starmap(create_successors, [[candidate_songs_str, current_playlist, t, True, best_k_playlists_string], [candidate_songs_str, current_playlist, T, False, best_k_playlists_string]])
             p.close()
             p.join()
@@ -216,7 +217,7 @@ def main(seed, N=10, k=20):
             # discard current_playlist
             return "failed to create playlist"
         else: # pop new current_playlist from candidate_playlists
-            with Pool(4) as p:
+            with Pool(32) as p:
                 phis_pres, phis_posts = p.starmap(batch_phi, [[pre_buffer[1], current_playlist[0], True], [post_buffer[1], current_playlist[-1], False]])
                 p.close()
                 p.join()
@@ -229,7 +230,7 @@ def main(seed, N=10, k=20):
                     phi = phis_posts[succ[1]]
                 succ_data.append((phi, song_p[succ[1]], [song_f[x] for x in succ[0]]))
 
-            with Pool(4) as p:
+            with Pool(32) as p:
                 ratings = p.starmap(h, succ_data)
                 p.close()
                 p.join()
@@ -243,4 +244,4 @@ def main(seed, N=10, k=20):
     return current_playlist
 
 if __name__ == "__main__":
-    print(main("spotify:track:3mScGCzxiXA9OaHdBeuk7O"))
+    print(main("spotify:track:2R7858bg0GHuBBxjTyOL7N"))

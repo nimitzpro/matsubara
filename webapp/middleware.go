@@ -108,10 +108,13 @@ func main() {
 			out += string(o) + ","
 		}
 		if random {
+			// var song []string
 			fmt.Println("generating random-based list off " + seed_track + "...")
 			cmd := exec.Command("python", "-c", "import rand; print(rand.main("+N+"), end='')")
 			fmt.Println(cmd.Args)
 			o, _ := cmd.CombinedOutput()
+
+			// songList := [...]string{o}
 			out += string(o) + "," // "{random:'" + string(o) + "'},"
 		}
 		if err != nil {
