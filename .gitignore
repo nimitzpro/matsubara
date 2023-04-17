@@ -11,6 +11,7 @@ data_backup/
 *.blg
 *.run.xml
 *.toc
+*.out
 
 !data/mpd/data/mpd.slice.0-999.json
 cuda-repo-wsl-ubuntu-12-0-local_12.0.0-1_amd64.deb

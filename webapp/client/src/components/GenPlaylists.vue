@@ -15,11 +15,11 @@
     <img src="../assets/spinner.gif" id="spinner" />
     {{ state.lists }}
 
-    <ul>
+    <!-- <ul>
       <li v-for="list in state.lists" :key="list">
         <li v-for="song in list" :key="song">{{ song.Track_name }} - {{ song.Artist_name }} - {{ song.Album_name }}</li>
       </li>
-    </ul>
+    </ul> -->
 
 </template>
 

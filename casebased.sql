@@ -110,7 +110,7 @@ SELECT pid, pindex FROM playlist_tracks WHERE track_uri = 'spotify:track:6I9VzXr
 
 SELECT track_uri FROM playlist_tracks WHERE pid = 38 AND pindex-1 = 30;
 
-select * from tracks where track_name like '%careless whisper%';
+select * from tracks where track_name like '%miiro%';
 select * from tracks where track_uri = 'spotify:track:5pyw9ufwba90TEl8HMzdDI';
 select * from track_features as tf join tracks as t where t.artist_name = 'Ken Ashcorp' and t.track_uri = tf.track_uri;
 select * from artist_genres as ag join tracks as t where t.artist_name = 'Ken Ashcorp' and t.artist_uri = ag.artist_uri;
@@ -151,3 +151,9 @@ select count(*) from similarities
 select * from similarities order by similarity desc limit 100
 
 -- select count(*) from seq2_simple where track_uri1 = 'spotify:track:0KKkJNfGyhkQ5aFogxQAPU' AND track_uri2 = 'spotify:track:5meZvaHT6pQx4AZP1f8lN3'
+
+
+select acousticness from track_features as tf where acousticness != 0.0 limit 30;
+select instrumentalness from track_features as tf where instrumentalness != 0.0 limit 30;
+
+select avg(acousticness) from track_features where acousticness != 0.0;

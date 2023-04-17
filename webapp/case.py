@@ -11,7 +11,7 @@ def var_attr(l, gamma, delta):
     while i < len(l) - 1:
         j = i + 1
         while j < len(l) and j - i < gamma:
-            if l[j] != 0 and l[i] != 0 and abs(l[j] - l[i]) > delta:
+            if l[j] != 0 and l[i] != 0 and abs(l[j] - l[i]) < delta:
                 mul_attr *= ((j-i) / gamma)
                 i = j
                 break
@@ -65,10 +65,11 @@ def batch_rel(setting, fetched_tracks, t):
     return rel_d
 
 def slim_var(song_features): # todo: fine-tuning deltas and gammas
-    delta_diffs = [0.25, 1, 0.25, 0.25, 0.25]
+    # delta_diffs = [0.25, 1, 0.25, 0.25, 0.25] old deltas
+    delta_diffs = [0.12559659911354276, 0.14243493379256492, 0.013280411877616508, 0.07070953181026222, 0.07261811636756003]
     gammas = [3, 3, 3, 3, 3]
     feature_list = np.array(song_features).transpose()
-    total_attrs = [var_attr(feature_list[i], gammas[i], delta_diffs[i]) for i in range(len(gammas))]
+    total_attrs = [var_attr(feature_list[i], gammas[i], delta_diffs[i]*2) for i in range(len(gammas))]
     total = 1
     for attr in total_attrs:
         total *= attr
@@ -147,7 +148,7 @@ def main(seed, N=10, k=20):
     fat = np.transpose([item for sublist in fetched_after_tracks.get() for item in sublist])
 
     print("calculating relevances...")
-    print(fpt)
+    # print(fpt)
 
     with Pool(32) as p:
         t2, t3 = p.starmap(batch_rel, [[0,fpt,seed], [1,fat,seed]])
@@ -244,4 +245,4 @@ def main(seed, N=10, k=20):
     return current_playlist
 
 if __name__ == "__main__":
-    print(main("spotify:track:2R7858bg0GHuBBxjTyOL7N"))
+    print(main("spotify:track:3mScGCzxiXA9OaHdBeuk7O"))
