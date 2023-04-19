@@ -111,13 +111,12 @@ SELECT pid, pindex FROM playlist_tracks WHERE track_uri = 'spotify:track:6I9VzXr
 SELECT track_uri FROM playlist_tracks WHERE pid = 38 AND pindex-1 = 30;
 
 select * from tracks where track_name like '%miiro%';
-select * from tracks where track_uri = 'spotify:track:5pyw9ufwba90TEl8HMzdDI';
-select * from track_features as tf join tracks as t where t.artist_name = 'Ken Ashcorp' and t.track_uri = tf.track_uri;
-select * from artist_genres as ag join tracks as t where t.artist_name = 'Ken Ashcorp' and t.artist_uri = ag.artist_uri;
 
 select * from playlist_tracks where pid = 999884;
 
-SELECT track_uri1, COUNT(*) FROM seq2_simple WHERE track_uri2 = 'spotify:track:4aVuWgvD0X63hcOCnZtNFA' GROUP BY track_uri1 ORDER BY track_uri1;
+select * from tracks where track_uri = 'spotify:track:2374M0fQpWi3dLnB54qaLX';
+
+SELECT track_uri1, COUNT(*) FROM seq2_simple WHERE track_uri2 = 'spotify:track:4aVuWgvD0X63hcOCnZtNFA' GROUP BY track_uri1 ORDER BY COUNT(*) DESC;
 
 
 SELECT p1.pid, p1.pindex, p2.pindex FROM playlist_tracks as p1 JOIN playlist_tracks as p2 WHERE p1.track_uri = 'spotify:track:4aVuWgvD0X63hcOCnZtNFA' AND p2.track_uri = 'spotify:track:2Nz6aF1umHh5Et6I5H581L' AND p1.pid = p2.pid AND p1.pid in ('531576','965625','561943','487573','552959','106406','230157','749920','118365','177079','54044','140335','511896','903900','347383','468744','816689','256962','472466','550703') AND p1.pindex + 2 = p2.pindex;

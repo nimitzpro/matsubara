@@ -6,6 +6,8 @@
 \usepackage{xurl}
 \usepackage{amsmath}
 \usepackage{bm}
+\usepackage{float}
+\graphicspath{ {./images/} }
 \addbibresource{citations.bib}
 
 \begin{document}
@@ -279,9 +281,39 @@ These will then be ranked out of 10 by survey, with top ranked lists passed back
 
 
 
-\chapter{Web Application} \label{chap:webapp}
-words
+\chapter{Beyond Testing}
 
+\section{Additional Algorithms}
+Other styles of algorithms such as machine learning approaches could be explored and compared to the case-based configurations, taking the input playlists as the training set.
+
+\section{Web Application} \label{chap:webapp}
+\subsection*{Current Implementation}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{webapp.jpeg}
+\end{figure}
+
+A webapp was developed for the open day and showcases a potential application of the project.
+A user chooses their desired song from the list returned after querying a title and/or artist name and is then taken to a screen where they can configure
+different settings and options, such as the length of the desired playlist and K amount of input playlists to be factored in. More settings could also be added here.
+Multiple algorithms could be configured with different settings.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{webapp2.jpeg}
+\end{figure}
+
+\subsection*{Further Development}
+Unfortunately the main case-based algorithm was not able to output an answer in time due to connection timeout which I did not have the time to solve,
+but the premise still works and similarity-based playlists are able to be generated and returned to the client in the form of a list of playlists, each consisting of song URIs.
+
+Song previews could be queried from Spotify on the website, and if a user likes any of the playlists, they could log into their Spotify account
+and add them to their profile.
+
+\section{Browser Extension}
+Instead of developing a separate website that users have to travel to separately from Spotify, an extension could be developed which a user would simply install,
+and would modify the Spotify web client, adding a tab, or simply as a popup like standard browser addons, allowing the user to do the same as above but be
+more convenient and even reading context from Spotify. The dataset and program could be downloaded with the addon, allowing local generation instead of pinging a server.
 
 \printbibliography
 

@@ -4,6 +4,8 @@ from multiprocessing import Pool
 from collections import Counter
 
 db_path = "Z:\\other\\spotify_backup.db"
+var_weight = 1
+beta = 0.25 # popularity weighting
 
 def var_attr(l, gamma, delta):
     mul_attr = 1
@@ -48,7 +50,6 @@ def batch_rel(setting, fetched_tracks, t):
         alpha = 0.5
         theta = 2
         lq = len(q)
-    beta = 0.5 # popularity weighting
 
     Q_s_filtered = "(" + ",".join(["'"+i+"'" for i in phis.keys()]) + ")"
     counts = np.transpose(c.execute(f"SELECT COUNT(*) FROM playlist_tracks WHERE track_uri in {Q_s_filtered} GROUP BY track_uri ORDER BY track_uri;").fetchall())[0]
@@ -73,7 +74,12 @@ def slim_var(song_features): # todo: fine-tuning deltas and gammas
     total = 1
     for attr in total_attrs:
         total *= attr
-    return total
+    # return total
+
+    # print("variety weighting:", var_weight)
+    balance_weight = 1 - var_weight
+    balance =  1 - total
+    return total + (balance*balance_weight)
 
 def check_batch(x, y, pre, best_playlists):
     '''
@@ -91,7 +97,6 @@ def slim_rel(phi, popularity):
         alpha = 0.5
         theta = 2
         lq = len(q)
-    beta = 0.5 # popularity weighting
     psi = 0
     psi = pow(popularity, beta)
     rel = phi / psi
@@ -147,7 +152,7 @@ def main(seed, N=10, k=20):
     fpt = np.transpose([item for sublist in fetched_prev_tracks.get() for item in sublist])
     fat = np.transpose([item for sublist in fetched_after_tracks.get() for item in sublist])
 
-    print("calculating relevances...")
+    # print("calculating relevances...")
     # print(fpt)
 
     with Pool(32) as p:
@@ -201,12 +206,14 @@ def main(seed, N=10, k=20):
 
     # print(best_k_playlists_string)
 
+    stack = []
+
     while len(current_playlist) < N:
         t = current_playlist[0]
         T = current_playlist[-1]
         successors_of_current_playlist = []
         candidate_songs_str = ",".join(["'"+c+"'" for c in candidate_songs if c not in current_playlist])
-
+        # print("candidate songs str", candidate_songs_str)
         with Pool(32) as p:
             pre_buffer, post_buffer = p.starmap(create_successors, [[candidate_songs_str, current_playlist, t, True, best_k_playlists_string], [candidate_songs_str, current_playlist, T, False, best_k_playlists_string]])
             p.close()
@@ -215,8 +222,13 @@ def main(seed, N=10, k=20):
         successors_of_current_playlist = pre_buffer[0] + post_buffer[0]
 
         if len(successors_of_current_playlist) == 0:
-            # discard current_playlist
-            return "failed to create playlist"
+            # print(stack)
+            current_playlist = stack[-1][0][0]
+            if len(stack[-1]) == 1:
+                stack = stack[:-1]
+            else:
+                stack[-1] = stack[-1][1::]
+            # return "failed to create playlist"
         else: # pop new current_playlist from candidate_playlists
             with Pool(32) as p:
                 phis_pres, phis_posts = p.starmap(batch_phi, [[pre_buffer[1], current_playlist[0], True], [post_buffer[1], current_playlist[-1], False]])
@@ -240,9 +252,42 @@ def main(seed, N=10, k=20):
                 successors_of_current_playlist[i].append(ratings[i])
 
             successors_of_current_playlist = sorted(successors_of_current_playlist, key=lambda x: x[3], reverse=True)
+            # print("TEST:", successors_of_current_playlist)
             current_playlist = successors_of_current_playlist[0][0]
+            if len(successors_of_current_playlist) > 1:
+                stack.append(successors_of_current_playlist[1:])
 
     return current_playlist
 
+def solo(s="", N=10, k=20):
+    conn = sqlite3.connect(db_path, check_same_thread=False)
+    cur = conn.cursor()
+    
+    if s:
+        print(",".join(main(s, N, k)))
+    else:
+        while True:
+            print("Enter song name:", end=" ")
+            title = input()
+            query = cur.execute(f"SELECT track_uri, track_name, artist_name FROM tracks WHERE song_name LIKE '%{title}%' LIMIT 20;").fetchall()
+            print("Select by index:", "\n".join([s for s in enumerate(query)]))
+            index = int(input())
+            if index == -1:
+                continue
+            else:
+                s = query[index][0]
+                break
+        print(",".join(main(s, N, k)))
+    
+
 if __name__ == "__main__":
-    print(main("spotify:track:3mScGCzxiXA9OaHdBeuk7O"))
+
+    # print(main("spotify:track:4aVuWgvD0X63hcOCnZtNFA"))
+
+    solo("spotify:track:4aVuWgvD0X63hcOCnZtNFA", k=20) 
+
+    # Defaults
+    # N = 10
+    # k = 20
+    # popularity (beta) = 0.5
+    # variety_weight = 1
