@@ -12,7 +12,7 @@ The full dataset is downloadable at this Google Drive [link](). If this file is 
 3. A list of track URIs will then be generated and returned in the console.
 4. Copy this list into the [Spotify Web API](https://developer.spotify.com/documentation/web-api/reference/reorder-or-replace-playlists-tracks), in the *uris* field.
 5. Create a new playlist on your Spotify Account.
-6. Copy the playlist ID from the address bar (https://open.spotify.com/playlist/`<your_playlist_id>`) and paste it into the *playlist_uri* field on the Web API page.
+6. Copy the playlist ID from the address bar (https://open.spotify.com/playlist/ `<your_playlist_id>`) and paste it into the *playlist_uri* field on the Web API page.
 7. By pressing *Try it* on the Web API page, your playlist should be populated with the generated songs.
 
 In order to change properties or playlist length, change the appropriate value in the file before running the file.
