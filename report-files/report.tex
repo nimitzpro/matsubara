@@ -26,21 +26,23 @@
         
             \textit{Alexander Stradnic}
         
-            \vspace{3cm}
+            \vspace{2cm}
         
             \includegraphics[width=0.6\textwidth]{piano.jpg}
         
-            \vspace{3cm}
+            \vspace{2cm}
         
             \textit{Prof. Derek G. Bridge}
+
+            \textit{Prof. Rosane Minghim}
         
             \vspace{0.5cm}
         
-            \textbf{University College Cork}
+            \textbf{Final Year Project, April 2023}
         
-            \textbf{Final Year Project, BSc. Computer Science}
-            
-            \textbf{April 2023}
+            \textbf{BSc. Computer Science}
+
+            \textbf{University College Cork}
         }
     \end{center}
 \end{titlepage}
@@ -53,10 +55,8 @@ context can be gained from previous playlists in order to build a new playlist f
 Patterns in previous playlists can be analysed and used to create an enjoyable and coherent listening experience.
 
 \chapter*{Declaration of Originality}
-In signing this declaration, you are conforming, in writing, that the sub-
-mitted work is entirely your own original work, except where clearly at-
-tributed otherwise, and that it has not been submitted partly or wholly for
-any other educational award.
+In signing this declaration, you are conforming, in writing, that the submitted work is entirely your own original work,
+except where clearly attributed otherwise, and that it has not been submitted partly or wholly for any other educational award.
 I hereby declare that:
 \begin{itemize}
     \item this is all my own work, unless clearly indicated otherwise, with full and proper accreditation;
@@ -77,7 +77,7 @@ or perform themselves. While the written recording of music as notation has exis
 would not have the education and time to be able to read and reproduce this music, aside from the nobility who would have 
 court musicians writing and performing music for them. W.A. Mozart, one of the most well-known composers today, had to travel the courts of Europe 
 after leaving Salzburg due to low pay and the desire to compose more freely; he battled with financial insecurity throughout his life.
-Turlough O'Carolan was a famous blind harper who traveled across Ireland composing planxties for patrons.
+Turlough O'Carolan was a famous blind harper who travelled across Ireland composing planxties for patrons.
 
 This also generated a rift between the 
 organised, written music of the elites with professional performers,
@@ -118,7 +118,7 @@ The practice of ``owning'' your own music would continue to remain popular with 
 Apple pioneered the digital sale of music online, allowing songs to be purchased individually, to be played on MP3 players such as the iPod.
 This broke with the previous paradigm of selling and playing by the album. People now had the ability to create their own custom collections of songs called playlists.
 At this point, most people still consciously which songs to purchase, and gathered their own personal collections on their own.
-However, with the rise of Napster and later Spotify, this model of music ownership becamse less popular, as people wished to listen to more music without having
+However, with the rise of Napster and later Spotify, this model of music ownership became less popular, as people wished to listen to more music without having
 to purchase every single song they wanted to listen to. Apple iTunes also started facilitating streaming, leading us to today, where most stream music 
 from a platform such as YouTube, iTunes, or Spotify.
 
@@ -145,12 +145,13 @@ which have various metadata tags available for songs and artists, but were dropp
 Processing was done on the dataset running in SQLite.
 The data was downloaded from Spotify's servers, structured as a set of JSON files.
 This was then converted into an SQLite database to improve lookup performance.
+Alternatively, this set of files could have been sequentially processed into Pandas and converted into CSV or Pickle files.
 Additional data was queried from Spotify's API.
 
 \section{Tables}
 \begin{itemize}
     \item \texttt{tracks} -- specific track info, song name, album name, etc.
-    \item \texttt{track\_features} -- generic track features as measured by Spotify such as acousticness, danceability, speechiness etc.
+    \item \texttt{track\_features} -- generic track features as measured by Spotify such as `acousticness', `danceability', `speechiness', etc.
     \item \texttt{artist\_genres} -- artists and their associated genres
     \item \texttt{playlists} -- playlist information
     \item \texttt{playlist\_tracks} -- link between tracks and playlists
@@ -179,7 +180,7 @@ The similarity-based approach likewise only works for precomputed similarities i
 
 \section{Limitations: Personalisation}\label{section:limpersonalisation}
 Personalising songs and genres based on a Spotify User Profile is technically possible by preferring user playlists and song features
-over generic playlists, it was beyond the scope of this project, requiring user authentication, processing and further development of the demonstration \hyperref[chap:webapp]{web-app}.
+over generic playlists, it was beyond the scope of this project, requiring user authentication, processing and further development of the demonstration web-app\textsuperscript{\ref{chap:webapp}}.
 User-user recommendation and weighting is also theoretically possible, but would require manual input of other users as Spotify does not have a
 public API for getting ``similar users''.
 
@@ -220,23 +221,22 @@ The most similar artist to the previously chosen artist not already in the list 
 
 \section{Implementation}
 The implementation queries a table which contains the similarity score between all artists' genres and chooses the highest ranked artist to the initial song's artist.
-It then continues as described above, outputting a list of tracks.
+It then continues as described in Design, outputting a list of tracks.
 
 Another implementation utilising similarity between artist tags along with genres was written for the Million Song Dataset, but does not output Spotify URIs.
 
 
 
 \chapter{Similarity-based Testing}
-All similarity-based playlists generated started with the original seed song, generating as described in Development\textsuperscript{\ref{chap:simdev}}.
-A drawback to my approach is that since it is based off of artists, it can only have one random song per artist in the list.
 
 \section{Examples}
-\paragraph{A standard playlist of length 10.}
 \preto\tabular{\setcounter{magicrownumbers}{0}}
 \newcounter{magicrownumbers}
 \newcommand\rownumber{\stepcounter{magicrownumbers}\arabic{magicrownumbers}}
-\begin{center}
-    \begin{figure}[H]
+
+\begin{figure}[H]
+    \paragraph{A standard playlist of length 10.}
+    \begin{center}
         \begin{tabulary}{\linewidth}{|@{\makebox[2em][c]{\rownumber}}|L|L|} 
             \hline
             \textbf{TOTO} & \textbf{Hold the Line} \\
@@ -261,12 +261,12 @@ A drawback to my approach is that since it is based off of artists, it can only 
             \hline
         \end{tabulary}
         \caption{\url{https://open.spotify.com/playlist/4qShHvmJIaFat9wV2yTgUK}}
-    \end{figure}
-\end{center}
+    \end{center}
+\end{figure}
 
-\paragraph{A playlist of length 20, 11--19 are skipped for brevity.}
-\begin{center}
-        \begin{figure}[H]
+\begin{figure}[H]
+    \paragraph{A playlist of length 20, 11--19 are skipped for brevity.}
+    \begin{center}
         \begin{tabulary}{\linewidth}{|C|L|L|} 
             \hline
             \rownumber & \textbf{George Michael} & \textbf{Careless Whisper} \\
@@ -295,14 +295,13 @@ A drawback to my approach is that since it is based off of artists, it can only 
             \hline
         \end{tabulary}
         \caption{\url{https://open.spotify.com/playlist/1ocr27MzrILNfgpHznMVKn}}
-    \end{figure}
-\end{center}
+    \end{center}
+\end{figure}
 
 \section{Compute Time}
 Playlists of length 10 were created, with the time to return a result for each captured below. The time to create a playlist based on similarity took on average 18 seconds.
-
-\begin{center}
-    \begin{figure}[H]
+\begin{figure}[H]
+    \begin{center}
         \begin{tabulary}{\linewidth}{|C|C|C|} 
             \hline
             TOTO & Hold the Line & 18.002 \\
@@ -317,8 +316,8 @@ Playlists of length 10 were created, with the time to return a result for each c
             \hline
         \end{tabulary}
     \caption{List of seed songs and times to compute playlists}
-    \end{figure}
-\end{center}
+    \end{center}
+\end{figure}
 
 \section{Conclusion}
 Similarity allows for a quick way to generate playlists from a seed song but may be inconsistent in the quality due to the random choice of song from each artist.
@@ -337,15 +336,9 @@ In this project I design a case-based algorithm using user-generated playlists f
 
 
 \chapter{Case-based Design}\label{casedesign}
-\paragraph{Case-based Recommendation (CBR):}
-The approach in which a playlist is generated from a seed song/shorter playlist using sequential patterns 
-learned from a dataset of existing playlists.
-CBR is a method of recommendation which can be used in contexts in which a meaningful order or sequence to objects is desired or useful.
-There can also be a large variety of possible values (such as songs in this case).
-
 \section{Case Base}
-A set of playlists may then be filtered to remove meaningless and/or noisy playlists, forming the Case Base.
-The playlists are then analysed, using their song order as well as the songs themselves, in order to 
+The set of playlists may be filtered to remove meaningless and/or noisy playlists, forming the Case Base.
+They are then analysed, using their song order as well as the songs themselves, in order to 
 come up with new playlists to generate from an initial seed song.
 
 \section{Retrieval of Playlists}
@@ -366,7 +359,7 @@ This is to be done using a process called Constructive Adaptation\textsuperscrip
     (either the seed song at the beginning or the highest ranked generated sequence chosen by HO afterwards)
     \item Hypothesis Ordering(HO): Uses the ranking of sequences from \(\mathcal{C}\) to rank the list of newly generated playlists after each iteration of HG
 \end{enumerate}
-An ideal solution is generated by appending or prepending a song at a time to the seed song, decided but creating potential successor 
+An ideal solution is generated by appending or prepending a song at a time to the seed song, decided by creating potential successor 
 solutions using Hypothesis Generation and ranking using Hypothesis Ordering. 
 This is continued recursively down the most ideal node. However, if no successor solution is generated at a particular level, then it is discarded from the 
 list of ranked generated sequences, and the process continues from that point, until a playlist of length \(\lambda\) is generated.
@@ -389,6 +382,11 @@ Combined variety for all attributes \(a \in \mathcal{A}\) for playlist \(p\):
 
 \[Var(p) = \prod_{a\in\mathcal{A}} V_a(p)\]
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{variance.png}
+\end{figure}
+
 \paragraph{Coherence}
 The coherence of each playlist in \(\mathcal{C}\) is calculated based on how related it is to the input song. 
 In order to calculate the Coherence for each playlist, the Relevance is first computed. 
@@ -403,14 +401,15 @@ The nodes generated at each stage are sequences of songs from the \(k\) playlist
 \(T'\) is a successor playlist, thus it contains all \(t \in T\), along with an additional song \(u\). This song is either prepended or appended to the list 
 of songs. Thus \(T' = \langle u + T \rangle\ \text{or}\ \langle T + u \rangle\).
 
-Considering the first case, \(u + t_1\) should appear at least once in the set of \(k\) retrieved playlists, in order to be coherent. Similar is done 
-in the second case, where \(t_n + u\) should appear at least once in \(k\). Thus the set of all successors would be all combinations of these two rules done recursively.
+Considering the first case, \(\langle u, t_1\rangle\) should appear at least once in the set of \(k\) retrieved playlists, in order to be coherent. Similar is done 
+in the second case, where \(\langle t_n, u\rangle\) should appear at least once in \(k\). Thus the set of all successors would be all combinations of these two rules done recursively.
 
 \paragraph{Hypothesis Ordering}
 The sequences are ordered by computing their Relevance and Variance, similar to how the \(k\) playlists were chosen. 
 \[H(T') = Rel(T', u) \cdot Var(T')\]
 Where \(T'\) is the successor list and \(u\) is the added song. 
 However, in order to determine whether future evolutions of \(T'\) will also be varied and coherent, a look-ahead parameter is added.
+\paragraph{Look-ahead Heuristic (L)}
 \begin{itemize}
     \item L = 0: The above formula is applied as is
     \item L = 1: \(H\) is performed on all the successors of \(T'\), and the maximum value found is returned 
@@ -418,14 +417,56 @@ However, in order to determine whether future evolutions of \(T'\) will also be 
 \end{itemize}
 As with many such parameters, a trade-off between precision and performance has to be chosen, as computing cost increases exponentially with \(L\).
 
+
+
 \chapter{Case-based Implementation}
+\section{Retrieving Playlists}
+I assume all playlists have already been curated of bad or noisy data, and take the full dataset as the Case Base \(\mathcal{C}\).
+
+To begin, all playlists featuring the seed song are selected, with the others discarded. Only the playlists containing the seed would have a Coherence rating, since
+only they would have relevant patterns to the seed. As only sequences of length 2 only are analysed, the Relevance Function is simplified.
+
+The sequences' \(\phi\) values are calculated by using a \texttt{COUNT()} aggregate method, summing up the occurrences of each sequences in \texttt{seq2\_simple}.
+These are balanced for popularity depending on the assignment of \(\beta\), and the relevances are returned.
+The playlists' variances are then calculated based on the \(\Delta\) and \(\gamma\) values given.
+Weighting variance is done by calculating \(1 - Var(p)\) for a balancing variable \(balance\). This difference is then multiplied by a value in \([0,1]\), and added to variance.
+A parameter, \texttt{var\_weight} is supplied, which is an inverse of the figure multiplied by \(balance\), thus a high weight \(\rightarrow\) less altered or unaltered variance.
+
+After all ratings are calculated, the top \(k\) playlists are chosen.
+
+\section{Generating with Reuse}
+A \texttt{while} loop is opened, and remains open until the playlist reaches the requisite length, or the program fails.
+
+Hypothesis Generation is implemented by creating a list of all possible successors of the current playlist, either prepending or appending songs to \(T\) from the \(k\) lists.
+This is done for each potential song \(u\) by checking whether the sequence of \(\langle u, t_1\rangle\) or \(\langle t_n, u\rangle\) exists in the set of \(k\) playlists.
+
+Hypothesis Ordering is done by ranking these partial playlists with ratings calculated using the same parameters as in the above section.
+If no successors were generated in Hypothesis Generation, then the current playlist is discarded and the highest ranked successor from the previous state is chosen,
+and HG is executed on that list.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{nodes.png}
+    \caption{The highest rated successor to \(\langle a,b,c\rangle\) is \(\langle a,b,c,d\rangle\).
+    However as it has no successors, the algorithm continues from \(\langle a,b,c,e\rangle\), returning a playlist of length \(\lambda\).}
+\end{figure}
 
 
+\section{Optimisations}\label{section:optimisations}
+In order for the algorithm to run in a reasonable amount of time, a series of optimisations were added.
 
-
+In retrieving the playlists from which ratings were calculated, songs directly before the seed were grouped into lists up to the SQLite limit of 1,000 (I use groups of 900),
+with songs directly after the seed grouped into another list of lists.
+These lists were then run in parallel using Python's \textit{multiprocessing} library, using a Pool and asynchronous maps to fetch all tracks concurrently.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{fetch.png}
+    \caption{The beginning of \texttt{main()}. Playlists containing the seed are retrieved, the adjacent songs are aggregated in SQL queries, and fetched in parallel with \texttt{Pool()} and \texttt{map\_async()}.}
+\end{figure}
+These concepts of batch processing and asynchronous function calls from the main function are used throughout for calculating relevancies, variances, successors, successor ratings and more.
 
 \chapter{Case-based Testing}
-I kept the seed song constant with \textit{TOTO - Hold the Line} being selected. It is a popular song, with 4,707 hits in the playlist database,
+I kept the seed song constant with \textit{TOTO -- Hold the Line} being selected. It is a popular song, with 4,707 hits in the playlist database,
 which allowed for a large variety of outputs when testing popularity balancing.
 
 \section{Properties}
@@ -439,12 +480,12 @@ which allowed for a large variety of outputs when testing popularity balancing.
 \end{itemize}
 
 \section{Examples: No Variety}
-\paragraph{When popularity and variety were disabled, playlists would form a characteristic group of songs from the same artist surrounding the original seed song, eventually
+\begin{figure}[H]
+    \paragraph{When popularity and variety were disabled, playlists would form a characteristic group of songs from the same artist surrounding the original seed song, eventually
 changing to another artist, with that artist featuring a few songs in a row. This is due to the large amount of sequences in the dataset playlists where consecutive songs from
 the same artist would feature one after another. Thus this configuration creates a set of popular songs from a few similar artists.}
 \[\{k = 20, \beta = 0, v = 0\}\]
-\begin{center}
-    \begin{figure}[H]
+    \begin{center}
         \begin{tabulary}{\linewidth}{|@{\makebox[2em][c]{\rownumber}}|L|L|} 
             \hline
             The Edgar Winter Group & Free Ride \\ 
@@ -469,13 +510,13 @@ the same artist would feature one after another. Thus this configuration creates
             \hline
         \end{tabulary}
     \caption{\url{https://open.spotify.com/playlist/31o7NXO6d63JjJjCZLbqzQ}}
-    \end{figure}
-\end{center}
+    \end{center}
+\end{figure}
 
-\paragraph{With only variety disabled but popularity enabled, a playlist of similar songs is created, but less popular songs are showcased more equally with the more popular tracks.}
+\begin{figure}[H]
+\paragraph{With only variety disabled but popularity enabled, a playlist of similar songs is created, but less popular songs are featured more.}
 \[\{k = 20, \beta = 0.5, v = 0\}\]
-\begin{center}
-    \begin{figure}[H]
+    \begin{center}
         \begin{tabulary}{\linewidth}{|@{\makebox[2em][c]{\rownumber}}|L|L|} 
             \hline
             Toby Keith & Courtesy of the Red, White and Blue (The Angry American) \\ 
@@ -500,16 +541,16 @@ the same artist would feature one after another. Thus this configuration creates
             \hline
         \end{tabulary}
     \caption{\url{https://open.spotify.com/playlist/1xp5G3XH4TIEK1V5giaXDl}}
-    \end{figure}
-\end{center}
+    \end{center}
+\end{figure}
 
 \section{Examples: Variety Tuning}
-\paragraph{From this early test it was clear that I had made the delta for penalising similarity too large. The strength of the variety function shifted the playlist
+\begin{figure}[H]
+    \paragraph{From this early test it was clear that I had made the delta for penalising similarity too large. The strength of the variety function shifted the playlist
 from the initial TOTO rock song, to dance-pop with Pitbull, to finally Scottish Pipes. It then continued to recommend Scottish Pipes due to their relatively low popularity,
 but also being the only tracks in sequence to each other.}
 \[\{k = 20, \beta = 0.5, v = 1, \Delta = 2\mu\}\]
-\begin{center}
-    \begin{figure}[H]
+    \begin{center}
         \begin{tabulary}{\linewidth}{|@{\makebox[2em][c]{\rownumber}}|L|L|} 
             \hline
             I Corvi & Silvia's Mother \\ 
@@ -534,17 +575,17 @@ but also being the only tracks in sequence to each other.}
             \hline
         \end{tabulary}
     \caption{\url{https://open.spotify.com/playlist/4AE8JviFihfX7U9BN5800h}}
-    \end{figure}
-\end{center}
+    \end{center}
+\end{figure}
 
-\paragraph{With an adjustment of the variety delta to \(1\mu\), the range of variety was lowered to a more reasonable level. The popularity balancing allowed for a more diverse
+\begin{figure}[H]
+    \paragraph{With an adjustment of the variety delta to \(1\mu\), the range of variety was lowered to a more reasonable level. The popularity balancing allowed for a more diverse
 cast of artists to feature while not completely discarding similar and popular songs.}
 \[\{k = 20, \beta = 0.5, v = 1, \Delta = 1\mu\}\]
-\begin{center}
-    \begin{figure}[H]
+    \begin{center}
         \begin{tabulary}{\linewidth}{|@{\makebox[2em][c]{\rownumber}}|L|L|} 
             \hline
-            Simon\& Garfunkel & The Sound of Silence - Acoustic Version \\ 
+            Simon \& Garfunkel & The Sound of Silence -- Acoustic Version \\ 
             \hline
             Timeflies & Worth It \\
             \hline
@@ -566,15 +607,46 @@ cast of artists to feature while not completely discarding similar and popular s
             \hline
         \end{tabulary}
     \caption{\url{https://open.spotify.com/playlist/1uToCokTDqze4UBbloNy9d}}
-    \end{figure}
-\end{center}
+    \end{center}
+\end{figure}
+
+\begin{figure}[H]
+    \paragraph{\(1.5\mu\) offers perhaps a more exciting playlist than \(1\mu\), if not straying a bit too far from the seed track.}
+\[\{k = 20, \beta = 0.5, v = 1, \Delta = 1.5\mu\}\]
+    \begin{center}
+        \begin{tabulary}{\linewidth}{|@{\makebox[2em][c]{\rownumber}}|L|L|} 
+            \hline
+            Don McLean & American Pie \\ 
+            \hline
+            I Corvi & Silvia's Mother \\
+            \hline
+            \textbf{TOTO} & \textbf{Hold the Line} \\
+            \hline
+            TOTO & Africa \\
+            \hline
+            Simon \& Garfunkel & The Sound of Silence -- Acoustic Version \\
+            \hline
+            Bee Gees & Stayin' Alive \\
+            \hline
+            Simon \& Garfunkel & Cecilia \\
+            \hline
+            John Travolta, Olivia Newton-John & You're The One That I Want -- From ``Grease'' \\
+            \hline
+            Simon \& Garfunkel & Mrs. Robinson -- From ``The Graduate'' \\
+            \hline
+            Boney M. & Rasputin \\
+            \hline
+        \end{tabulary}
+    \caption{\url{https://open.spotify.com/playlist/1usMuMwjrNruBFoLeqx0zr}}
+    \end{center}
+\end{figure}
 
 \section{Examples: Changing \(k\)}
-\paragraph{Increasing the amount of \(k\) input playlists to 50 shows returns a playlist with more popular tracks, as these songs which previously did not make the list
-with only the top 20 playlists now had the opportunity to appear.}
+\begin{figure}[H]
+    \paragraph{Increasing the amount of \(k\) input playlists to 50 returns a playlist with more popular tracks, as these songs which previously did not make the list
+with only the top 20 playlists now have the opportunity to appear, even if their playlists are less relevant to the seed.}
 \[\{k = 50, \beta = 0.5, v = 1, \Delta = 1\mu\}\]
-\begin{center}
-    \begin{figure}[H]
+    \begin{center}
         \begin{tabulary}{\linewidth}{|@{\makebox[2em][c]{\rownumber}}|L|L|} 
             \hline
             Edwin Starr & War \\ 
@@ -599,13 +671,14 @@ with only the top 20 playlists now had the opportunity to appear.}
             \hline
         \end{tabulary}
     \caption{\url{https://open.spotify.com/playlist/1UKuGg9ZADwF9zGAyAupsC}}
-    \end{figure}
-\end{center}
+    \label{fig:toto50}
+    \end{center}
+\end{figure}
 
-\paragraph{Altering \(\beta\) to 1 reduces the power of popular songs yet again, but perhaps reduces it too much\ldots}
+\begin{figure}[H]
+    \paragraph{Altering \(\beta\) to 1 reduces the power of popular songs yet again, but perhaps reduces it too much\ldots}
 \[\{k = 50, \beta = 1, v = 1, \Delta = 1\mu\}\]
-\begin{center}
-    \begin{figure}[H]
+    \begin{center}
         \begin{tabulary}{\linewidth}{|@{\makebox[2em][c]{\rownumber}}|L|L|} 
             \hline
             I Corvi & Silvia's Mother \\ 
@@ -630,13 +703,13 @@ with only the top 20 playlists now had the opportunity to appear.}
             \hline
         \end{tabulary}
     \caption{\url{https://open.spotify.com/playlist/4SWteaUeuATt9kPKS7KoUf}}
-    \end{figure}
-\end{center}
+    \end{center}
+\end{figure}
 
-\paragraph{Fine-tuning \(\beta\) further yields the following list:}
-\[\{k = 50, \beta = 0.75, v = 1, \Delta = 1\mu\}\]
-\begin{center}
-    \begin{figure}[H]
+\begin{figure}[H]
+    \paragraph{Fine-tuning \(\beta\) further yields the following list:}
+    \[\{k = 50, \beta = 0.75, v = 1, \Delta = 1\mu\}\]
+    \begin{center}
         \begin{tabulary}{\linewidth}{|@{\makebox[2em][c]{\rownumber}}|L|L|} 
             \hline
             I Corvi & Silvia's Mother \\ 
@@ -661,16 +734,16 @@ with only the top 20 playlists now had the opportunity to appear.}
             \hline
         \end{tabulary}
     \caption{\url{https://open.spotify.com/playlist/6922qeZ91GFbkAzycgHhPG}}
-    \end{figure}
-\end{center}
+    \end{center}
+\end{figure}
 
 \section{Examples: Other Seeds}
-\paragraph{Generating a playlist from a less common seed song, \(v = 0.5, \beta = 0.5\) returns a nice list of cover songs. What is more interesting, however, is the fact that
+\begin{figure}[H]
+    \paragraph{Generating a playlist from a less common seed song, \(v = 0.5, \beta = 0.5\) returns a nice list of cover songs. What is more interesting, however, is the fact that
 an identical list was generated from setting \(v = 1\), \(\beta = 1\), or both parameters to 1. Even changing the amount of input playlists to 50 did not change the output.
 It seems that there is not much choice in candidate songs and thus the same songs are chosen, even with different parameters for popularity and variance.}
 \[\{k = 20/50, \beta = 0.5/1, v = 0.5/1, \Delta = 1\mu\}\]
-\begin{center}
-    \begin{figure}[H]
+    \begin{center}
         \begin{tabulary}{\linewidth}{|@{\makebox[2em][c]{\rownumber}}|L|L|} 
             \hline
             Jonathan Parecki & Hacking to the Gate (from ``Steins;Gate'') \\ 
@@ -696,14 +769,14 @@ It seems that there is not much choice in candidate songs and thus the same song
         \end{tabulary}
     \caption{\url{https://open.spotify.com/playlist/2LxN8uMTPnLc7iPFTs4rNW}}
     \label{fig:steins}
-    \end{figure}
-\end{center}
+    \end{center}
+\end{figure}
 
-\paragraph{Generating a playlist from a Brazilian song results in a fairly diverse and localised playlist, however some English songs are able to make it into the playlist.
+\begin{figure}[H]
+    \paragraph{Generating a playlist from a Brazilian song results in a fairly diverse and localised playlist, however some English songs are able to make it into the playlist.
 Then it returns back to Portuguese, which implies that English songs are present and common in the foreign-language input playlists.}
 \[\{k = 20, \beta = 0.5, v = 1, \Delta = 1\mu\}\]
-\begin{center}
-    \begin{figure}[H]
+    \begin{center}
         \begin{tabulary}{\linewidth}{|@{\makebox[2em][c]{\rownumber}}|L|L|} 
             \hline
             \textbf{Zeca Baleiro} & \textbf{Bandeira} \\ 
@@ -728,35 +801,84 @@ Then it returns back to Portuguese, which implies that English songs are present
             \hline
         \end{tabulary}
     \caption{\url{https://open.spotify.com/playlist/5iuJd0P5MCO3IToDCXcQ1x}}
-    \end{figure}
-\end{center}
+    \end{center}
+\end{figure}
+
+\begin{figure}[H]
+    \paragraph{Recommendations for K-Pop, seems to have favours popular artists, thus a more stringent \(\beta\) may improve the diversity.}
+\[\{k = 20, \beta = 0.5, v = 1, \Delta = 1\mu\}\]
+    \begin{center}
+        \begin{tabulary}{\linewidth}{|@{\makebox[2em][c]{\rownumber}}|L|L|} 
+            \hline
+            Red Velvet & Dumb Dumb \\
+            \hline
+            BLACKPINK & PLAYING WITH FIRE -- KR Ver.\\
+            \hline
+            BLACKPINK & BOOMBAYAH -- KR Ver. \\
+            \hline
+            BLACKPINK & WHISTLE -- KR Ver.\\
+            \hline
+            BTS & I Need U \\
+            \hline
+            BTS & Dope \\
+            \hline
+            \textbf{BTS} & \textbf{Burning Up (Fire)} \\ 
+            \hline
+            BTS & Epilogue: Young Forever \\
+            \hline
+            EXO & Ko Ko Bop \\
+            \hline
+            EXO & Power \\
+            \hline
+        \end{tabulary}
+    \caption{\url{https://open.spotify.com/playlist/0qdvzm5HzE66hSGy28VZ45}}
+    \end{center}
+\end{figure}
+
+\section{More Playlists}
+\begin{itemize}
+    \item \href{https://open.spotify.com/playlist/5BzSBnHkqY3G0ZZfQBx8jL}{PSY | Gangnam Style} -- \(\{k = 20, \beta = 0.75, v = 1, \Delta = 1\mu\}\), \textbf{Very slow execution thanks to constant node failures}\label{link:gangnam}
+    \item \href{https://open.spotify.com/playlist/6OMPoEFOcPiC8uNNVUvoRa}{PSY | Gentleman} -- \(\{k = 20, \beta = 0.5, v = 1, \Delta = 1\mu\}\)
+    \item \href{https://open.spotify.com/playlist/36lVBXeEfk9EDG7yVY5NcC}{Stuttgart Chamber Orchestra/Antonio Vivaldi | Four Seasons} -- \(\{k = 20, \beta = 0.5, v = 1, \Delta = 1\mu\}\)
+\end{itemize}
 
 \section{Compute Time}
 The time taken to construct playlists using the case-based algorithm varied ranging from just a few minutes with playlists such as \textit{Gate of Steiner}\textsuperscript{\ref{fig:steins}}
-up to 20 minutes or more with 
+up to 20 minutes or more with \textit{Hold the Line}\textsuperscript{\ref{fig:toto50}}, especially with \(k = 50\). The compute time is proportional to amount of songs gathered from the
+retrieved playlists, and takes longer when backtracking from nodes that fail to produce full lists.
+
+\subsection*{Jupyter Notebooks}
+Writing the implementation for Case-based learning was mostly done in a Jupyter Notebook, which ran on \textit{Windows Subsystem for Linux}.
+It was observed that playlists took far longer to generate in the Jupyter Notebook under WSL, even for cases with no node discarding and \(k=20\), compared to a version rewritten as a Python file
+with the same optimisations\textsuperscript{\ref{section:optimisations}}.
 
 \section{Conclusion}
-
+Case-based recommendation is a highly configurable approach to generating playlists, allowing for a user to choose whether they want a list of songs that are mainly similar, 
+popular, diverse, or a combination of all three, by tweaking the available parameters.
 
 \chapter{Future Work}
 \section{Further Testing and Development}
 Continued testing and work on areas such as:
 \begin{itemize}
-    \item Implementing the look-ahead factor described in Case-based Design\textsuperscript{\ref{casedesign}}
+    \item Implementing the Look-ahead factor described in Case-based Design\textsuperscript{\ref{casedesign}}
+    \item More intelligent node handling for edge cases where constant node traversal slows down the algorithm immensely, an example of which was running \textit{PSY -- Gangnam Style}\textsuperscript{\ref{link:gangnam}}.
+    Could be done with caching node length results, and potentially improve performance with implementations of \(L > 0\)
     \item Adding artist genres as a feature in the Variety Function
     \item Beginning from a list of seed songs and retrieving the combined top ranked playlists for Reuse
     \item Adding an element of randomness when choosing the next song to be added to the list (weighted on ranking or rating of each prospective track)
+    \item Adding length 3 sequences
     \item Enhancing similarity-based generation with track feature analysis
 \end{itemize}
 
 \section{Surveys}
-In this project I used my own intuition and reasoning when determining the strengths and weaknesses of the various playlist generation parameters.
+In this project I used my own intuition and logical reasoning when determining the strengths and weaknesses of the various playlist generation parameters.
 A way to improve this further would be to open the algorithms to the public and conduct surveys to get more opinions. Ultimately, people's tastes in music
-are subjective, and some may prefer any of the given options rather than simply the most popular, and the variety gives users a freedom of choice in
+are subjective, and some may prefer any of the given options rather than simply the most popular. The variety of options gives users a freedom of choice in
 determining the style of playlist they desire, in contrast to many services which tend to be a simple button.
 
 \section{Additional Algorithms}
 Other styles of algorithms such as machine learning approaches could be explored and compared to the case-based configurations, taking the input playlists as the training set.
+These would most likely benefit from using the Pandas approach to data processing rather than SQLite.
 
 \section{Addressing Limitations}
 The song\textsuperscript{\ref{section:limsongs}} and personalisation\textsuperscript{\ref{section:limpersonalisation}} limitations detailed earlier could be solved or mitigated with further development.

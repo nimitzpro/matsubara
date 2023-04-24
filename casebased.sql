@@ -158,4 +158,4 @@ select avg(acousticness) from track_features where acousticness != 0.0;
 
 select count(*) from playlist_tracks where track_uri = 'spotify:track:4aVuWgvD0X63hcOCnZtNFA'
 
-select * from tracks where artist_name LIKE '%zeca%'
+select * from tracks where artist_name LIKE '%bts%' AND track_name LIKE '%fire%';

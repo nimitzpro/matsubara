@@ -5,7 +5,7 @@ from collections import Counter
 
 db_path = "Z:\\other\\spotify_backup.db"
 var_weight = 1
-beta = 0.75 # popularity weighting
+beta = 0.5 # popularity weighting
 stdN = 1
 
 def var_attr(l, gamma, delta):
@@ -153,7 +153,7 @@ def main(seed, N=10, k=20):
     fpt = np.transpose([item for sublist in fetched_prev_tracks.get() for item in sublist])
     fat = np.transpose([item for sublist in fetched_after_tracks.get() for item in sublist])
 
-    # print("calculating relevances...")
+    print("calculating relevances...")
     # print(fpt)
 
     with Pool(32) as p:
@@ -181,7 +181,7 @@ def main(seed, N=10, k=20):
         else:
             playlist_features[int(song[0])].append((song[1],song[2],song[3],song[4],song[5]))
 
-    # print("calculating variances...")
+    print("calculating variances...")
 
     with Pool(32) as p:
         variances = p.map(slim_var,[playlist_features[int(pid)] for pid in tr_tuples_sorted[0]])
@@ -208,7 +208,7 @@ def main(seed, N=10, k=20):
     for song in song_popularity:
         song_p[song[0]] = int(song[1])
 
-    # print(f"generating playlist from {k} input playlists...")
+    print(f"generating playlist from {k} input playlists...")
     # print(candidate_songs_str)
 
     # print(best_k_playlists_string)
@@ -231,12 +231,13 @@ def main(seed, N=10, k=20):
         if len(successors_of_current_playlist) == 0:
             # print(stack)
             current_playlist = stack[-1][0][0]
+            print(current_playlist)
             if len(stack[-1]) == 1:
                 stack = stack[:-1]
             else:
                 stack[-1] = stack[-1][1::]
             # return "failed to create playlist"
-        else: # pop new current_playlist from candidate_playlists
+        else:
             with Pool(32) as p:
                 phis_pres, phis_posts = p.starmap(batch_phi, [[pre_buffer[1], current_playlist[0], True], [post_buffer[1], current_playlist[-1], False]])
                 p.close()
@@ -290,8 +291,8 @@ def solo(s="", N=10, k=20):
 
 if __name__ == "__main__":
 
-    # solo(k=50)
-    solo(s="spotify:track:1R2SZUOGJqqBiLuvwKOT2Y", k=20) 
+    solo(k=20)
+    # solo(s="spotify:track:1R2SZUOGJqqBiLuvwKOT2Y", k=20) 
 
     # Defaults
     # N = 10

@@ -1,0 +1,85 @@
+tank!
+
+bohemian rhapsody
+
+test1
+
+[('ARVML631187B99E90D', "The B-52's", 'Love Shack (Album Version)'), ('AR040JZ1187FB399A9', 'Sparks', 'Gratuitous Sax'), ('AR026PU1187FB43FD9', 'The Vapors', 'Live At The Marquee'), ('AR00IM31187B99B83A', 'Danger Mouse & Jemini', 'Knuckle Sandwich'), ('AR00B1I1187FB433EB', 'Eagle-Eye Cherry', 'Desireless'), ('AR002UA1187B9A637D', 'The Bristols', 'A Picture Of You'), ('ARHBUBO11F50C4EBAF', 'The Bristols', 'For You'), ('AREQVWS1241B9CC0A4', 'Miss Ludella Black', 'Without My Love'), ('ARK7BM31187B99E57D', 'The Alarm Clocks', "You're Always Near"), ('ARPHHBI1264D0E3513', 'Headache City', 'Hey Ugly')]
+
+[('AR8ANXA1187B98BFC3', 'Hellsongs', 'Thunderstruck'), ('AR2R1BM1187FB3CF46', 'Bic Runga', 'Blue Blue Heart'), ('AR1O7ZH1187B9A5621', 'Tilly & The Wall', 'Pot Kettle Black'), ('AR040RJ1187FB4D2AB', 'Azure Ray', 'For The Sake Of The Song'), ('AR03NAV1187B9920EF', 'The Murmurs', 'Genius'), ('AR00B1I1187FB433EB', 'Eagle-Eye Cherry', 'Desireless'), ('AR002UA1187B9A637D', 'The Bristols', 'A Picture Of You'), ('ARHBUBO11F50C4EBAF', 'The Bristols', 'For You'), ('AREQVWS1241B9CC0A4', 'Miss Ludella Black', 'Without My Love'), ('ARK7BM31187B99E57D', 'The Alarm Clocks', "You're Always Near")]
+
+[('ARBRTTL12454A4CC69', 'Selena', 'Sukiyaki'), ('ARABDLL1187B9A6FD2', 'Pedro Suarez-Vertiz', 'No llores más morena'), ('ARA5OOT1187B9B0989', 'Jaula de Grillos', 'Adios'), ('AR9ODZ41187FB37D6E', 'Tarik Y La Fabrica De Colores', 'Agosto Por Ejemplo'), ('AR19FD51187FB49344', 'Fantasma #3', 'Todo puede ser'), ('AR0LP1J1187FB543D9', 'Sr Chinarro', 'Gitana'), ('AR03D6O1187B9B0108', 'Boy Omega', 'To let go'), ('AR01AEG1187B9B6070', 'Le sport', 'Eurosport music baby!'), ('AR00B1I1187FB433EB', 'Eagle-Eye Cherry', 'Desireless'), ('AR002UA1187B9A637D', 'The Bristols', 'A Picture Of You')]
+
+[('AROIL3N1187B9A9975', 'BLEED THE SKY', 'Killtank'), ('AR9DY0I1187FB3BD33', 'Le Reno Amps', 'Send Me On My Way'), ('AR694O01187FB44F22', 'Diecast', 'The Coldest Rain'), ('AR4DJIO1187FB3C594', 'All That Remains', 'The Weak Willed'), ('AR0BYBG1187FB3F3E1', 'Eths', 'Le Projet Humain'), ('AR04UU11187FB41E44', 'The Kidneythieves', 'Steve Speaks'), ('AR00B1I1187FB433EB', 'Eagle-Eye Cherry', 'Desireless'), ('AR002UA1187B9A637D', 'The Bristols', 'A Picture Of You'), ('ARHBUBO11F50C4EBAF', 'The Bristols', 'For You'), ('AREQVWS1241B9CC0A4', 'Miss Ludella Black', 'Without My Love')]
+
+[('ARBJ22B1187B9AD31C', 'Russell Watson / Royal Philharmonic Orchestra / John Lubbock', 'Bohemian Rhapsody'), ('AR99RTN1187B9A7A0C', 'M Ward', 'Oh Lonesome Me'), ('AR91NIO1187FB4D732', 'Cat Power', 'Cross Bones Style'), ('AR52NSC1187B98F66D', 
+'Nina Nastasia', 'This Familiar Way'), ('AR01HKT1187B996F26', 'The Mountain Goats', 'Alphabetizing'), ('AR00RBU1187B9B3F1F', 'Matthew Jay', 'Meteorology'), ('AR00B1I1187FB433EB', 'Eagle-Eye Cherry', 'Desireless'), ('AR002UA1187B9A637D', 'The Bristols', 'A Picture Of You'), ('ARHBUBO11F50C4EBAF', 'The Bristols', 'For You'), ('AREQVWS1241B9CC0A4', 'Miss Ludella Black', 'Without My Love')]
+
+
+
+after fix
+[('ARNYFVH1187B9B6A9E', 'Billy Joel', 'Piano Man'), ('ARJ45QE1187FB423B8', 'Bob Seger & The Silver Bullet Band', 'Nine Tonight (LP Version)'), ('AR91C8S1187B990901', 'Bruce Springsteen', 'Better Days'), ('ARUQFUJ1187FB42AEC', 'Warren Zevon', 'The Rest of the Night'), ('ARCE5NR1187FB5636A', 'Buffalo Springfield', 'Kind Woman (LP Version)'), ('ARSFKG71187FB3D66F', 'Crosby_ Stills & Nash', 'Southern Cross  (LP Version)'), ('AR2UE9U1187B9AD9DA', 'Crosby_ Stills_ Nash and Young', 'Helpless'), ('ARPISA41187FB3DE42', 'Humble Pie', 'Hallelujah I Love Her So'), ('ARDYR3C1187FB461CE', 'George Thorogood And The Destroyers', 'Hello Josephine'), ('ARSP62A1187FB3BD00', 'George Thorogood And The Destroyers', 'Night Time (Live)')]
+
+[('AR396C01187FB58717', 'Rico Rodriguez', 'Wonderful World - Original'), ('ARZZRK91187B9A5CA5', 'Delroy Wilson', 'Living In The Foots Steps Of Another Man'), ('ARVODOV1187B9AE0CC', 'The Melodians', 'Submission'), ('ARMEJWT1187FB5A1E7', 'Justin Hinds And The Dominoes', 'Fight Too Much'), ('ARGZBYX1187FB54EE0', 'Derrick Morgan', 'Mek it Tan Deay'), ('AR7DNHO1187B992B0B', 'Alton Ellis', 'The Valley of Decision'), ('ARMA7FY1187FB49821', 'The Uniques', 'Never Let Me Go'), ('AR3FEBG1187FB451E2', 'Stranger Cole', 'Capture Land'), ('ARY3FEA1187FB5C695', 'Cedric Brooks', 'Father Forgive Him'), ('ARFLJIB1187B9AF85D', 'Brentford Allstars', 'Greedy G')]
+
+
+average similarity: 0.5019930260878571
+closest pair of artists: (606902364, 'AR7R1IA1187B9B076C', 'ARK8H4H1187B9ACB0E', 0.6724137931034483)
+furthest pair of artists: (627270480, 'AR8ANXA1187B98BFC3', 'ARVWBEJ1187B9AF5CE', 0.42)
+[('AR8ANXA1187B98BFC3', 'Hellsongs', 'Thunderstruck'), ('ARVWBEJ1187B9AF5CE', 'Hello Saferide', 'The Quiz'), ('ARAB79K1187B99D3EC', 'Anna Ternheim', "I'll Follow You Tonight"), ('AROCG301187FB508F0', 'Oh Laura', 'Release Me'), ('AR8W8NX1187FB35F0F', 'Laleh', 'Det är vi som bestämmer (Vem har lurat alla barnen)'), ('AR8Y7EI1187FB4B28F', 'Sophie Zelmani', 'Fire'), ('ARIBTH31187B98F25B', 'Maria Mena', 'Pale People'), ('ARK8H4H1187B9ACB0E', 'Amanda Marshall', 'Red Magic Marker'), ('AR7R1IA1187B9B076C', 'Jann Arden', 'Shooting Horses'), ('ARKXL281187FB52DDE', 'Terri Clark', 'Now That I Found You')]
+
+
+average similarity: 0.5882174737813752
+closest pair of artists: (294734121, 'AR7B66W1187FB4D5D6', 'ARHQIBC1187B9B72BE', 0.7777777777777778)
+furthest pair of artists: (107622072, 'AR2F8G61187B9A5812', 'ARK9LNI1187FB4D116', 0.40625)
+[('ARK9LNI1187FB4D116', 'A*Teens', 'Dancing Queen'), ('AR2F8G61187B9A5812', 'Nicki French', 'I Surrender 2007 (Klub Kidz Cascara Mix)'), ('AR5O6W51187FB46984', 'SNAP!', 'Cult Of SNAP!'), ('ARLL70S1187B98D1AC', 'Bass Bumpers', "Runnin'"), ('AR7B66W1187FB4D5D6', '2 Unlimited', 'No Limit'), ('ARHQIBC1187B9B72BE', 'Cappella', 'U Got 2 Know (Martini Trance Remix)'), ('ARTF5AN1187FB473CE', 'Double You', 'Loving You'), ('ARQVZ7F1187FB57CC9', 'Twenty 4 Seven', 'Good Times'), ('ARF60F61187B9B14B8', '2 Brothers On The 4th Floor', 'One Day (Soul Relation Mix)'), ('AR83CCO1187FB44A20', 'The Outhere Brothers', 'Enjoy')]
+
+
+average similarity: 0.4617137367568402
+closest pair of artists: (690759824, 'ARA9P6D1187B9B6002', 'ARQDRRG1187B9A64B1', 0.6875)
+furthest pair of artists: (852674893, 'ARE592P1187B99F3A7', 'ARMDDLW1187FB40A7E', 0.40540540540540543)
+[('ARUKNSS1187FB435E3', 'Bobby Broom', 'Fly Me to the Moon'), ('AR3IX9Y11C8A42272B', 'Beau Williams', "Heaven's Not So Far Away"), ('ARMDDLW1187FB40A7E', 'Lori Perry', 'Nine Eleven'), ('ARE592P1187B99F3A7', 'Tonex', 'Bring It'), ('ARNXITY1187B98C5C1', 'Helen Baylor', "Helen's Testimony (LP Version)"), ('ARGOLWM1187B98CEDE', 'Commissioned', 'Hold Me'), ('ARA9P6D1187B9B6002', 'Kurt Carr', 'God Blocked It'), ('ARQDRRG1187B9A64B1', 'Fred Hammond & Radical For Christ', 'Let The Praise Begin'), ('ARTDBI61187FB48479', 'Marvin Sapp', 'Do Your Dance (LP Version)'), ('AR9XNDG1187B98CA92', 'Hezekiah Walker & LFC', 'All Of My Help')]
+
+
+average similarity: 0.43505092768023806
+closest pair of artists: (869028099, 'AREL88S1187B9B1466', 'ARIGA901187FB385F3', 0.6)
+furthest pair of artists: (870623187, 'AREMEW61187B9B62DD', 'ARIGA901187FB385F3', 0.4074074074074074)
+[('ARH3S5S1187FB4F76B', 'Nirvana', 'Heart Shaped Box'), ('AR5N8VN1187FB37A4E', 'Soundgarden', 'Gun'), ('AR6XPWV1187B9ADAEB', 'Foo Fighters', 'Still'), ('ARM7EDF1187B9B3FA1', "Guns N' Roses", 'Street Of Dreams'), ('ARTAFV91187B9BA17C', 'Stone Temple Pilots', 'A Song For Sleeping (LP Version)'), ('AR4T2IF1187B9ADBB7', 'Billy Idol', 'Scream'), ('AREMEW61187B9B62DD', 'Cheap Trick', 'Stop This Game'), ('ARIGA901187FB385F3', 'Scorpions', 'Dark Lady'), 
+('AREL88S1187B9B1466', 'Europe', 'Ready Or Not'), ('ARORX9K1187FB3DC3F', 'White Lion', 'Broken Heart (LP Version)')]
+
+
+average similarity: 0.5220981525806134
+closest pair of artists: (284056733, 'AR70CDT1187FB5796F', 'ARZDZR21187B99C78C', 0.6785714285714286)
+furthest pair of artists: (959012342, 'ARH8VT91187FB49CA2', 'ARMEAHG1187FB45FE3', 0.3709677419354839)
+[('ARMEAHG1187FB45FE3', 'Kyu Sakamoto', 'Sukiyaki'), ('ARH8VT91187FB49CA2', 'The Exciters', 'Swallow Your Pride'), ('AR6TNOA1187B9B5C44', 'Betty Everett', 'Prince Of Players'), ('ARXY7M01187B9B7611', 'The Dixie Cups', 'Chapel of Love'), ('ARALP6I1187B989E27', 'The Shirelles', 'Sha-La-La'), ('ARBUHDB1187FB3E72C', 'Bobby Vee', 'Rubber Ball'), ('ARZDZR21187B99C78C', 'Ray Ennis/The Blue Jeans', 'What Have They Done To Hazel (2008 Digital Remaster)'), ('AR70CDT1187FB5796F', 'The Tremeloes', 'Here Comes My Baby'), ('ARKUI581187B9A6856', "Herman's Hermits", 'Your Hand In Mine (2002 Digital Remaster)'), ('ARF0EFR1187FB3DA7E', 'The New Seekers', 'Beg_ Steal Or Borrow')]
+
+
+average similarity: 0.5036204252595252
+closest pair of artists: (1224538126, 'ARTMGWK1187B9AC568', 'ARUDRXI1187FB45A15', 0.6101694915254238)
+furthest pair of artists: (48946282, 'AR12F2S1187FB56EEF', 'AREYJKQ1187B9AEAB5', 0.5172413793103449)
+[('ARL4TII1187B9B46E1', 'Queen', 'We Are The Champions (2009 Digital Remaster)'), ('AR12F2S1187FB56EEF', 'Aerosmith', "I'm Ready"), ('AREYJKQ1187B9AEAB5', 'Gin Blossoms', 'Cold River Dick'), ('ARTMGWK1187B9AC568', 'Vertikal Horizon', "You're A God"), ('ARUDRXI1187FB45A15', 'Sixpence None The Richer', "Don't Dream It's Over (LP Version)"), ('ARP96FM1187B9AEA77', 'Semisonic', 'Suprise'), ('ARXTH0J1187B9AE634', 'The Calling', 'Anything'), ('ARI8QZ71187B9B1A20', 'Nick Carter', 'What I Got To Do?'), ('ARK9H6H1187B9B2A96', 'Jc Chasez', 'All Day Long I Dream About Sex'), ('ARKKUTC12454A4C57F', 'Robbie Williams And Jane Horrocks', 'Things')]
+
+
+average similarity: 0.5144838209368554
+closest pair of artists: (1130403374, 'ARNO7X01187FB53697', 'ARQGGC71187FB5017A', 0.6428571428571429)
+furthest pair of artists: (1243514812, 'ARVML631187B99E90D', 'ARXQBR11187B98A2CC', 0.4528301886792453)
+[('ARVML631187B99E90D', "The B-52's", 'Love Shack (Album Version)'), ('ARXQBR11187B98A2CC', 'Frankie Goes To Hollywood', 'Relax'), ('AR040JZ1187FB399A9', 'Sparks', 'Gratuitous Sax'), ('ARNO7X01187FB53697', 'Split Enz', 'I Got You'), ('ARQGGC71187FB5017A', 'The Thrills', 'No-One Likes To Be Upstaged'), ('ARNUMI91187FB4D208', 'Aztec Camera', 'Sunset'), ('ARLDL3D1187FB4D28F', 'Altered Images', 'Idols'), ('ARMTECY1187FB41948', 'Cutting Crew', "Lauren's Theme"), ('ARU7CW61187FB51117', 'Nik Kershaw', 'Die Laughing'), ('ARYAUMZ1187B9A2A40', 'Spandau Ballet', 'A Matter Of Time')]
+
+
+average similarity: 0.4455010978155534
+closest pair of artists: (1150437008, 'ARONRBJ11F50C49E81', 'ARRHN841187FB594BC', 0.6595744680851063)
+furthest pair of artists: (745976193, 'ARBIKGQ1187B991F75', 'ARRHN841187FB594BC', 0.4406779661016949)
+[('ARPC1IG1187B9B2875', 'Yes', 'Roundabout (Chicago 1979)'), ('ARMR7HO1187FB462CB', 'Emerson_ Lake & Palmer', 'Still...You Turn Me On'), ('ARA9UZY1187B99A684', 'Jethro Tull', 'Skating Away (On The Thin Ice Of The New Day)'), 
+('ARZTSYB1187FB54987', 'Rainbow', 'Since You Been Gone'), ('AR87K371187FB5AA8E', 'Uriah Heep', 'Overload'), ('AR8MA9B1187FB59374', "Manfred Mann's Earth Band", 'Blinded By The Light'), ('ARVQQI41187FB3F504', 'Peter Hammill', 
+'Golden Promises'), ('ARONRBJ11F50C49E81', 'Captain Beefheart & The Magic Band', 'Bat Chain Puller'), ('ARRHN841187FB594BC', 'Captain Beefheart', 'Seam Crooked Sam'), ('ARBIKGQ1187B991F75', 'Matthias Thurow', 'Katharina - Original Version')]
+
+
+----- USING MBTAGS -----
+
+average similarity: 0.4401400560224089
+closest pair of artists: (874262, 'AR59PQG1187B9A7228', 'ARIZODP1187B9AD272', 0.8333333333333334)
+furthest pair of artists: (964480, 'AR5TUVS1187B98F6BC', 'AR6O7DD1187B989B72', 0.35294117647058826)
+[('ARPC1IG1187B9B2875', 'Yes', 'Roundabout (Chicago 1979)'), ('ARIZODP1187B9AD272', 'Bryan Ferry', 'Is Your Love Strong Enough?'), ('AR59PQG1187B9A7228', 'Paul Young', 'Love Will Tear Us Apart'), ('ARML8X41187B990644', 'Simple Minds', 'Glittering Prize (2001 Digital Remaster)'), ('AR040JZ1187FB399A9', 'Sparks', 'Gratuitous Sax'), ('AR05OG01187B9B8A98', 'Todd Rundgren', "It Wouldn't Have Made Any Difference"), ('ARI0DX71187FB4EE83', 'Mory Kanté', 'Yeke Yeke'), ('AR5TUVS1187B98F6BC', 'Celso Piña', 'Lo Eterno'), ('AR6O7DD1187B989B72', 'Lila Downs', 'Brown Paper People'), ('AR50LUJ1187B9ACA8B', 'Manu Chao', 'La Vacaloca')]
+
+
+----- COMBINED -----
