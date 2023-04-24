@@ -31,10 +31,9 @@ create table playlists(
 );
 
 .tables
-
 -- DROP table tracks;
 
-select distinct count(*) from tracks;
+select distinct count(*) from similarities;
 
 SELECT DISTINCT * FROM tracks limit 0, 20;
 
@@ -47,11 +46,11 @@ select count(*) from playlists WHERE collaborative = 1;
 
 .schema tracks
 
-create table seq2_occurences(
-    track_uri1 TEXT,
-    track_uri2 TEXT,
-    prevalence INT
-);
+-- create table seq2_occurences(
+--     track_uri1 TEXT,
+--     track_uri2 TEXT,
+--     prevalence INT
+-- );
 
 create table seq2_simple(
     track_uri1 TEXT,
@@ -110,7 +109,7 @@ SELECT pid, pindex FROM playlist_tracks WHERE track_uri = 'spotify:track:6I9VzXr
 
 SELECT track_uri FROM playlist_tracks WHERE pid = 38 AND pindex-1 = 30;
 
-select * from tracks where track_name like '%miiro%';
+select * from tracks where track_name like '%gangnam style%';
 
 select * from playlist_tracks where pid = 999884;
 
@@ -131,8 +130,8 @@ SELECT track_uri1, COUNT(*) FROM seq2_simple WHERE track_uri1 in ('spotify:track
 
 SELECT track_uri1, COUNT(*) FROM seq2_simple WHERE track_uri1 = 'spotify:track:5o4yGlG0PfeVUa6ClIyOxq' AND track_uri2 = 'spotify:track:11dxtPJKR4E0wlSr0A0t47';
 
-select * from tracks where track_uri = 'spotify:track:2mfUa8bLs2s5N4VaqJZ4lZ'
-select * from tracks where track_uri = 'spotify:track:57JRZbE80MLsYbmb24cPee'
+select * from tracks where track_uri = 'spotify:track:1R2SZUOGJqqBiLuvwKOT2Y'
+select * from tracks where track_uri = 'spotify:track:0kTZWRzfmqDN4boykkjUXH'
 
 SELECT count(DISTINCT track_uri) FROM playlist_tracks WHERE pid in ('525966','261994','735199','939549','108724','251912','852548','324328','913938','87573','850610','306768','838831','497929','80262','732551','594659','863062');
 
@@ -156,3 +155,7 @@ select acousticness from track_features as tf where acousticness != 0.0 limit 30
 select instrumentalness from track_features as tf where instrumentalness != 0.0 limit 30;
 
 select avg(acousticness) from track_features where acousticness != 0.0;
+
+select count(*) from playlist_tracks where track_uri = 'spotify:track:4aVuWgvD0X63hcOCnZtNFA'
+
+select * from tracks where artist_name LIKE '%zeca%'

@@ -7,6 +7,8 @@
 \usepackage{amsmath}
 \usepackage{bm}
 \usepackage{float}
+\usepackage{tabulary}
+\usepackage{array,etoolbox}
 \graphicspath{ {./images/} }
 \addbibresource{citations.bib}
 
@@ -47,10 +49,8 @@
 In this Final Year Project I present the use of Case-based Recommendation in creating music playlists, 
 along with providing an implementation of this CBR system and examples of output.
 Playlists are sequences of songs arranged in a particular order. Using this information, 
-context can be gained from previous playlists in order to build a new playlist from a given seed song or starting list. 
+context can be gained from previous playlists in order to build a new playlist from a given seed song. 
 Patterns in previous playlists can be analysed and used to create an enjoyable and coherent listening experience.
-This paper mainly makes reference to the paper below \cite{main}. 
-Other research and ideas were drawn from \cite{constructive-adaptation} and \cite{cbr-general}.
 
 \chapter*{Declaration of Originality}
 In signing this declaration, you are conforming, in writing, that the sub-
@@ -125,7 +125,7 @@ from a platform such as YouTube, iTunes, or Spotify.
 \section[Modern Problems Require Modern Solutions]{Modern Problems Require Modern \\ Solutions}
 This rise in music streaming, along with the ability to purchase individual songs for a cheap price, has meant that listening to albums from start to finish
 drastically reduced in popularity. Many people listen to playlists or just the individual songs themselves as shown in these surveys
-carried out by Deezer\cite{deezer} and MusicBiz\cite{musicbiz}.
+carried out by Deezer\textsuperscript{\cite{deezer}} and MusicBiz\textsuperscript{\cite{musicbiz}}.
 
 A major convenience offered by music streaming providers nowadays is the automatic generation of playlists,
 making it easier for users to listen to a variety of music without having to create their own playlists manually.
@@ -134,10 +134,14 @@ which take into account previous user listening activity and the preferences of 
 methods generate the most interesting playlists for users?} In this paper, I explore various ways of generating music playlists, focusing on case-based recommendation.
 
 
+
+
 \chapter{General Implementation Details}
 
 \section{Data}
-The data was acquired from Spotify's Million Playlist Dataset.
+The data was acquired from Spotify's Million Playlist Dataset. Other options explored were MusicBrainz and the Million Song Datasets,
+which have various metadata tags available for songs and artists, but were dropped due to lack of source playlists.
+
 Processing was done on the dataset running in SQLite.
 The data was downloaded from Spotify's servers, structured as a set of JSON files.
 This was then converted into an SQLite database to improve lookup performance.
@@ -160,12 +164,12 @@ This is due to the large amount of useful libraries available for the language s
 writing and readability. 
 
 \section{Output}
-All algorithms described in this paper take in an input seed song or starting list of URIs, and output a generated list of track URIs.
+All algorithms described in this paper take in an input seed track URI, and output a generated list of track URIs.
 \\
 \\
 \texttt{(spotify:track:1, spotify:track:2,\ldots, spotify:track:\(\lambda\))}
 
-\section{Limitations in Song Output}
+\section{Limitations: Song Output}\label{section:limsongs}
 Due to the nature of Case-based Recommendation, it can only generate playlists containing songs that are already present in the seed dataset, 
 thus limited to songs up to 2017.
 This is because it ranks songs rather than a generic set of features, and even an output comprising a list of feature sets would be limited to the dataset
@@ -173,25 +177,166 @@ due to the inability of querying Spotify by features.
 
 The similarity-based approach likewise only works for precomputed similarities in the dataset.
 
-\section{Limitations in Personalisation}
-Personalising songs and genres based on a Spotify User Profile is possible by preferring user playlists and song features
+\section{Limitations: Personalisation}\label{section:limpersonalisation}
+Personalising songs and genres based on a Spotify User Profile is technically possible by preferring user playlists and song features
 over generic playlists, it was beyond the scope of this project, requiring user authentication, processing and further development of the demonstration \hyperref[chap:webapp]{web-app}.
 User-user recommendation and weighting is also theoretically possible, but would require manual input of other users as Spotify does not have a
 public API for getting ``similar users''.
 
 
-\chapter{Similarity-based Recommendation}
+
+\chapter{Similarity-based Solutions}
 \section{Background}
-words
+A logical conclusion one would come to when asked how to generate a playlist given an input song would be to create a playlist of similar songs.
+In fact, there are many websites that generate playlists based off a song such as \href{https://www.chosic.com/playlist-generator/}{Chosic}, \href{https://spotalike.com/}{Spotalike}
+and \href{https://www.similarsongfinder.com/}{SimilarSongFinder}. These tend to be used by users to discover new artists and songs.
+
+\section{Simple Similarity}
+One method to create playlists is to simply choose the most similar song to the given song.
+The next most similar song to that song, aside from any songs already in the playlist, is then added.
+This process can be continued until the playlist of desired length is generated.
+
+\section{GLSF}
+An interesting solution utilising similarity is the Global-Local Similarity Function\textsuperscript{\cite{glsf}}. In this approach, a playlist is generated
+in which the transition between tracks is constrained by the difference in track features between the songs in order to prevent a hard transition between two songs.
+The transitions are measured by scoring functions and songs with scores in the desired range are chosen.
+
+\section{Conclusion}
+Similarity rating is a simple but powerful concept. It has many applications and can be used as a building block in more advanced algorithms
+or be the core of an algorithm as with GLSF. In this project I chose to implement a simplistic version of similarity, mainly as a reference against
+the various Case-based configurations\textsuperscript{\ref{chap:casesolutions}}.
+
+
+
+\chapter{Similarity-based Development}\label{chap:simdev}
+\section{Design}
+Based on the data available, I decided to design the algorithm to output a playlist with songs chosen randomly from an artist not already in the list.
+While I wanted to work based on the songs themselves, the artists actually contained the features, so the algorithm works using artist similarity.
+The seed song's artist is looked up and the most similar artist is chosen. A random song by that artist is chosen.
+The most similar artist to the previously chosen artist not already in the list is then chosen and the process is repeated until a playlist of desired length is achieved.
 
 \paragraph{Jaccard Similarity}
-This was used to precompute the similarity between different songs based on their attributes. 
-This can then be used to create a playlist based purely on track similarity.
-
 \[Sim(\bm{s_1}, \bm{s_2}) = \frac{|\bm{s_1} \cap \bm{s_2}|}{|\bm{s_1} \cup \bm{s_2}|}\]
 
+\section{Implementation}
+The implementation queries a table which contains the similarity score between all artists' genres and chooses the highest ranked artist to the initial song's artist.
+It then continues as described above, outputting a list of tracks.
 
-\chapter{Case-based Learning}
+Another implementation utilising similarity between artist tags along with genres was written for the Million Song Dataset, but does not output Spotify URIs.
+
+
+
+\chapter{Similarity-based Testing}
+All similarity-based playlists generated started with the original seed song, generating as described in Development\textsuperscript{\ref{chap:simdev}}.
+A drawback to my approach is that since it is based off of artists, it can only have one random song per artist in the list.
+
+\section{Examples}
+\paragraph{A standard playlist of length 10.}
+\preto\tabular{\setcounter{magicrownumbers}{0}}
+\newcounter{magicrownumbers}
+\newcommand\rownumber{\stepcounter{magicrownumbers}\arabic{magicrownumbers}}
+\begin{center}
+    \begin{figure}[H]
+        \begin{tabulary}{\linewidth}{|@{\makebox[2em][c]{\rownumber}}|L|L|} 
+            \hline
+            \textbf{TOTO} & \textbf{Hold the Line} \\
+            \hline
+            Dary Hall \& John Oates & You've Lost That Lovin' Feeling \\ 
+            \hline
+            Fleetwood Mac & Got to Move \\
+            \hline
+            Meta Loaf & Good Girls Go To Heaven \\
+            \hline
+            Dire Straits & Telegraph Road \\
+            \hline
+            Foreigner & Growing up the Hardway \\
+            \hline
+            Journey & Lights \\
+            \hline
+            Boston & You Gave up on Love (2.0) \\
+            \hline
+            Styx & Light Up \\
+            \hline
+            Kansas & The Pinnacle \\
+            \hline
+        \end{tabulary}
+        \caption{\url{https://open.spotify.com/playlist/4qShHvmJIaFat9wV2yTgUK}}
+    \end{figure}
+\end{center}
+
+\paragraph{A playlist of length 20, 11--19 are skipped for brevity.}
+\begin{center}
+        \begin{figure}[H]
+        \begin{tabulary}{\linewidth}{|C|L|L|} 
+            \hline
+            \rownumber & \textbf{George Michael} & \textbf{Careless Whisper} \\
+            \hline
+            \rownumber & Cher & Fires of Eden \\ 
+            \hline
+            \rownumber & Mandy Moore & Want You Back \\
+            \hline
+            \rownumber & Hannah Montana & Don't Wanna Be Torn \\
+            \hline
+            \rownumber & Zac Efron & Ladies' Choice (``Hairspray'') \\
+            \hline
+            \rownumber & Kesha & Blow -- Deconstructed Mix \\
+            \hline
+            \rownumber & Demi Lovato & Confident Outro/For You Intro \\
+            \hline
+            \rownumber & Christina Aguilera & When You Put Your Hands on Me \\
+            \hline
+            \rownumber & Liam Payne, Quavo, Nevada & Strip That Down -- Nevada Remix \\
+            \hline
+            \rownumber & Hailee Steinfeld, Grey, Zedd, KillaGraham & Starving -- Killagraham Remix \\
+            \hline
+            \ldots & \ldots & \ldots \\
+            \hline
+            20 & Ashley Tisdale & Acting Out \\
+            \hline
+        \end{tabulary}
+        \caption{\url{https://open.spotify.com/playlist/1ocr27MzrILNfgpHznMVKn}}
+    \end{figure}
+\end{center}
+
+\section{Compute Time}
+Playlists of length 10 were created, with the time to return a result for each captured below. The time to create a playlist based on similarity took on average 18 seconds.
+
+\begin{center}
+    \begin{figure}[H]
+        \begin{tabulary}{\linewidth}{|C|C|C|} 
+            \hline
+            TOTO & Hold the Line & 18.002 \\
+            \hline
+            George Michael & Careless Whisper & 17.947 \\
+            \hline
+            Jonathan Parecki & Miiro (From ``KanColle: Kantai Collection'') &  18.006 \\
+            \hline
+            Britney Spears & Toxic & 17.971 \\
+            \hline
+            PSY & Gangnam Style & 17.959 \\
+            \hline
+        \end{tabulary}
+    \caption{List of seed songs and times to compute playlists}
+    \end{figure}
+\end{center}
+
+\section{Conclusion}
+Similarity allows for a quick way to generate playlists from a seed song but may be inconsistent in the quality due to the random choice of song from each artist.
+Artists tend to produce more than one type of music, but unfortunately many songs were missing genre descriptors.
+
+\chapter{Case-based Solutions}\label{chap:casesolutions}
+\section{Background}
+Case-based solutions extrapolate sequences and patterns from input user data.
+The outcome of this analysis is then used when it is queried to generate a new output.
+There are many applications of case-based recommendation, from advising select products based on price and features to recommending restaurants and services\textsuperscript{\cite{cbr-general}}.
+
+\section{Application to Playlist Generation}
+As demonstrated in the paper by Baccigalupo and Plaza\textsuperscript{\cite{main}}, it is possible to adapt case-based reasoning to generate playlists in various forms.
+In this project I design a case-based algorithm using user-generated playlists from Spotify, and expand on work done prior by testing various settings of parameters.
+
+
+
+\chapter{Case-based Design}\label{casedesign}
 \paragraph{Case-based Recommendation (CBR):}
 The approach in which a playlist is generated from a seed song/shorter playlist using sequential patterns 
 learned from a dataset of existing playlists.
@@ -215,7 +360,7 @@ After computing the Variety and Coherence for each playlist \(p\in\mathcal{C}\),
 
 \section{Reuse}
 After the \(k\) playlists have been ranked, they have to be then converted in some way to form a single playlist of a particular length \(\lambda\). 
-This is to be done using a process called Constructive Adaptation(references \cite{constructive-adaptation} in \cite{main}), which comprises of two parts:
+This is to be done using a process called Constructive Adaptation\textsuperscript{\cite{constructive-adaptation}}, which comprises of two parts:
 \begin{enumerate}
     \item Hypothesis Generation(HG): How partial solutions are extended from the currently generated state of the playlist 
     (either the seed song at the beginning or the highest ranked generated sequence chosen by HO afterwards)
@@ -226,7 +371,7 @@ solutions using Hypothesis Generation and ranking using Hypothesis Ordering.
 This is continued recursively down the most ideal node. However, if no successor solution is generated at a particular level, then it is discarded from the 
 list of ranked generated sequences, and the process continues from that point, until a playlist of length \(\lambda\) is generated.
 
-\section{Formulae Used}\cite[pp. 5--10]{main}
+\section{Formulae Used\textsuperscript{\cite[pp. 5--10]{main}}}
 \paragraph{Variety}
 The variety of each playlist in \(\mathcal{C}\) is calculated based on the repetition of song features within a set distance. 
 This is first calculated per attribute and then each attribute's variety is combined together:
@@ -273,20 +418,353 @@ However, in order to determine whether future evolutions of \(T'\) will also be 
 \end{itemize}
 As with many such parameters, a trade-off between precision and performance has to be chosen, as computing cost increases exponentially with \(L\).
 
-
-
-\chapter{Testing}
-A variety of CBR systems will be tested with varying weightings of Coherence and Variance, along with the simpler pseudorandom and similarity-based algorithms.
-These will then be ranked out of 10 by survey, with top ranked lists passed back into the dataset.
+\chapter{Case-based Implementation}
 
 
 
-\chapter{Beyond Testing}
+
+
+\chapter{Case-based Testing}
+I kept the seed song constant with \textit{TOTO - Hold the Line} being selected. It is a popular song, with 4,707 hits in the playlist database,
+which allowed for a large variety of outputs when testing popularity balancing.
+
+\section{Properties}
+\begin{itemize}
+    \item \(k\) input playlists from which the final playlist is constructed, default of 20
+    \item \(\beta\) popularity weighting -- ranges between 0 (no popularity balancing) and 1 (full balancing), default of 1
+    \item \(v\) variety weighting -- ranges between 0 (no variety) and 1 (full variety rating is multiplied with coherence)
+    \item \(\Delta\) difference between two songs' features being compared in the variety function, usually a multiple of the feature's standard deviation.
+    This was calculated on the dataset in advance for each feature used
+    \item \(\gamma\) interval in which songs are compared for variety, set to 3 for all tests
+\end{itemize}
+
+\section{Examples: No Variety}
+\paragraph{When popularity and variety were disabled, playlists would form a characteristic group of songs from the same artist surrounding the original seed song, eventually
+changing to another artist, with that artist featuring a few songs in a row. This is due to the large amount of sequences in the dataset playlists where consecutive songs from
+the same artist would feature one after another. Thus this configuration creates a set of popular songs from a few similar artists.}
+\[\{k = 20, \beta = 0, v = 0\}\]
+\begin{center}
+    \begin{figure}[H]
+        \begin{tabulary}{\linewidth}{|@{\makebox[2em][c]{\rownumber}}|L|L|} 
+            \hline
+            The Edgar Winter Group & Free Ride \\ 
+            \hline
+            \textbf{TOTO} & \textbf{Hold the Line} \\
+            \hline
+            TOTO & Rosanna \\
+            \hline
+            TOTO & Africa \\
+            \hline
+            Journey & Any Way You Want It \\
+            \hline
+            Journey & Faithfully \\
+            \hline
+            Journey & Separate Ways (Worlds Apart) \\
+            \hline
+            Kansas & Carry on Wayward Son \\
+            \hline
+            Kansas & Dust in the Wind \\
+            \hline
+            Rick Springfield & Jessie's Girl \\
+            \hline
+        \end{tabulary}
+    \caption{\url{https://open.spotify.com/playlist/31o7NXO6d63JjJjCZLbqzQ}}
+    \end{figure}
+\end{center}
+
+\paragraph{With only variety disabled but popularity enabled, a playlist of similar songs is created, but less popular songs are showcased more equally with the more popular tracks.}
+\[\{k = 20, \beta = 0.5, v = 0\}\]
+\begin{center}
+    \begin{figure}[H]
+        \begin{tabulary}{\linewidth}{|@{\makebox[2em][c]{\rownumber}}|L|L|} 
+            \hline
+            Toby Keith & Courtesy of the Red, White and Blue (The Angry American) \\ 
+            \hline
+            Brooks \& Dunn & She's Not The Cheatin' Kind \\
+            \hline
+            Brooks \& Dunn & Hillbilly Deluxe \\
+            \hline
+            Mark Chesnutt & It Sure Is Monday \\
+            \hline
+            Mark Chesnutt & Bubba Shot The Jukebox \\
+            \hline
+            OMFG & Hello \\
+            \hline
+            Walker Hayes & You Broke Up With Me \\
+            \hline
+            \textbf{TOTO} & \textbf{Hold the Line} \\
+            \hline
+            Aerosmith & Dream On - Live Version \\
+            \hline
+            Wild Cherry & Play That Funky Music \\
+            \hline
+        \end{tabulary}
+    \caption{\url{https://open.spotify.com/playlist/1xp5G3XH4TIEK1V5giaXDl}}
+    \end{figure}
+\end{center}
+
+\section{Examples: Variety Tuning}
+\paragraph{From this early test it was clear that I had made the delta for penalising similarity too large. The strength of the variety function shifted the playlist
+from the initial TOTO rock song, to dance-pop with Pitbull, to finally Scottish Pipes. It then continued to recommend Scottish Pipes due to their relatively low popularity,
+but also being the only tracks in sequence to each other.}
+\[\{k = 20, \beta = 0.5, v = 1, \Delta = 2\mu\}\]
+\begin{center}
+    \begin{figure}[H]
+        \begin{tabulary}{\linewidth}{|@{\makebox[2em][c]{\rownumber}}|L|L|} 
+            \hline
+            I Corvi & Silvia's Mother \\ 
+            \hline
+            \textbf{TOTO} & \textbf{Hold the Line} \\
+            \hline
+            Queen & Bohemian Rhapsody \\
+            \hline
+            Dave Edmunds & I Hear You Knocking \\
+            \hline
+            Usher, Lil Jon, Ludacris & Yeah! \\
+            \hline
+            Pitbull, Ne-Yo & Time of Our Lives \\
+            \hline
+            Golden Earring & Radar Love \\
+            \hline
+            The Scottish Bagpipes Highland Pipes & Amazing Grace \\
+            \hline
+            The Scottish Bagpipes Highland Pipes & Amazing Grace Bagpipe Solo \\
+            \hline
+            The Scottish Bagpipes Highland Pipes & Scotland the Brave \\
+            \hline
+        \end{tabulary}
+    \caption{\url{https://open.spotify.com/playlist/4AE8JviFihfX7U9BN5800h}}
+    \end{figure}
+\end{center}
+
+\paragraph{With an adjustment of the variety delta to \(1\mu\), the range of variety was lowered to a more reasonable level. The popularity balancing allowed for a more diverse
+cast of artists to feature while not completely discarding similar and popular songs.}
+\[\{k = 20, \beta = 0.5, v = 1, \Delta = 1\mu\}\]
+\begin{center}
+    \begin{figure}[H]
+        \begin{tabulary}{\linewidth}{|@{\makebox[2em][c]{\rownumber}}|L|L|} 
+            \hline
+            Simon\& Garfunkel & The Sound of Silence - Acoustic Version \\ 
+            \hline
+            Timeflies & Worth It \\
+            \hline
+            TOTO & Africa \\
+            \hline
+            \textbf{TOTO} & \textbf{Hold the Line} \\
+            \hline
+            Arjun Kaul & Can't Fight This Feeling \\
+            \hline
+            Boston & More Than a Feeling \\
+            \hline
+            Bryan Adams & Summer Of '69 \\
+            \hline
+            Kansas & Dust in the Wind \\
+            \hline
+            Queen & Bohemian Rhapsody \\
+            \hline
+            Samuel Barber, Leonard Bernstein, New York Philharmonic & Adagio for String, Op. 11 \\
+            \hline
+        \end{tabulary}
+    \caption{\url{https://open.spotify.com/playlist/1uToCokTDqze4UBbloNy9d}}
+    \end{figure}
+\end{center}
+
+\section{Examples: Changing \(k\)}
+\paragraph{Increasing the amount of \(k\) input playlists to 50 shows returns a playlist with more popular tracks, as these songs which previously did not make the list
+with only the top 20 playlists now had the opportunity to appear.}
+\[\{k = 50, \beta = 0.5, v = 1, \Delta = 1\mu\}\]
+\begin{center}
+    \begin{figure}[H]
+        \begin{tabulary}{\linewidth}{|@{\makebox[2em][c]{\rownumber}}|L|L|} 
+            \hline
+            Edwin Starr & War \\ 
+            \hline
+            Commodores & Brick House \\
+            \hline
+            Thin Lizzy & The Boys Are Back In Town \\
+            \hline
+            Kansas & Carry on Wayward Son \\
+            \hline
+            Kansas & Dust in the Wind \\
+            \hline
+            Journey & Any Way You Want It \\
+            \hline
+            TOTO & Africa \\
+            \hline
+            \textbf{TOTO} & \textbf{Hold the Line} \\
+            \hline
+            TOTO & Rosanna \\
+            \hline
+            Orquestra Discotheque, Beto Montes & Tú \\
+            \hline
+        \end{tabulary}
+    \caption{\url{https://open.spotify.com/playlist/1UKuGg9ZADwF9zGAyAupsC}}
+    \end{figure}
+\end{center}
+
+\paragraph{Altering \(\beta\) to 1 reduces the power of popular songs yet again, but perhaps reduces it too much\ldots}
+\[\{k = 50, \beta = 1, v = 1, \Delta = 1\mu\}\]
+\begin{center}
+    \begin{figure}[H]
+        \begin{tabulary}{\linewidth}{|@{\makebox[2em][c]{\rownumber}}|L|L|} 
+            \hline
+            I Corvi & Silvia's Mother \\ 
+            \hline
+            \textbf{TOTO} & \textbf{Hold the Line} \\
+            \hline
+            Arjun Kaul & Can't Fight This Feeling \\
+            \hline
+            Boston & More Than A Feeling \\
+            \hline
+            Harry Nilsson & Without You \\
+            \hline
+            Scorpions & The Future Never Dies \\
+            \hline
+            Scorpions & House of Cards \\
+            \hline
+            Scorpions & Humanity \\
+            \hline
+            REO Speedwagon & Take It On The Run \\
+            \hline
+            Iron Maiden & Fear of the Dark \\
+            \hline
+        \end{tabulary}
+    \caption{\url{https://open.spotify.com/playlist/4SWteaUeuATt9kPKS7KoUf}}
+    \end{figure}
+\end{center}
+
+\paragraph{Fine-tuning \(\beta\) further yields the following list:}
+\[\{k = 50, \beta = 0.75, v = 1, \Delta = 1\mu\}\]
+\begin{center}
+    \begin{figure}[H]
+        \begin{tabulary}{\linewidth}{|@{\makebox[2em][c]{\rownumber}}|L|L|} 
+            \hline
+            I Corvi & Silvia's Mother \\ 
+            \hline
+            \textbf{TOTO} & \textbf{Hold the Line} \\
+            \hline
+            Arjun Kaul & Can't Fight This Feeling \\
+            \hline
+            Boston & More Than A Feeling \\
+            \hline
+            Bryan Adams & Summer Of '69 \\
+            \hline
+            Kansas & Dust in the Wind \\
+            \hline
+            Queen & Bohemian Rhapsody \\
+            \hline
+            Elton John & Rocket Man (I Think It's Going To Be A Long Long Time) \\
+            \hline
+            Earth, Wind \& Fire & September \\
+            \hline
+            Marvin Gaye & Let's Get It On \\
+            \hline
+        \end{tabulary}
+    \caption{\url{https://open.spotify.com/playlist/6922qeZ91GFbkAzycgHhPG}}
+    \end{figure}
+\end{center}
+
+\section{Examples: Other Seeds}
+\paragraph{Generating a playlist from a less common seed song, \(v = 0.5, \beta = 0.5\) returns a nice list of cover songs. What is more interesting, however, is the fact that
+an identical list was generated from setting \(v = 1\), \(\beta = 1\), or both parameters to 1. Even changing the amount of input playlists to 50 did not change the output.
+It seems that there is not much choice in candidate songs and thus the same songs are chosen, even with different parameters for popularity and variance.}
+\[\{k = 20/50, \beta = 0.5/1, v = 0.5/1, \Delta = 1\mu\}\]
+\begin{center}
+    \begin{figure}[H]
+        \begin{tabulary}{\linewidth}{|@{\makebox[2em][c]{\rownumber}}|L|L|} 
+            \hline
+            Jonathan Parecki & Hacking to the Gate (from ``Steins;Gate'') \\ 
+            \hline
+            \textbf{PianoDreams} & \textbf{Gates Of Steiner - Steins;Gate OST} \\
+            \hline
+            Eddie van der Meer & Believe Me [Steins;Gate] \\
+            \hline
+            RMaster & Resuscitated Hope (from ``Gosick'') \\
+            \hline
+            Kenzie Smith Piano & This Game (from ``No Game No Life'') \\
+            \hline
+            Kenzie Smith Piano & Aqua Terrarium (from ``Nagi no Asukara'') \\
+            \hline
+            Kenzie Smith Piano & Ebb and Flow (from ``Nagi no Asukara'') \\
+            \hline
+            Eddie van der Meer & My Dearest [Guilty Crown] \\
+            \hline
+            Eddie van der Meer & Hacking To The Gate (OP from `Steins;Gate') \\
+            \hline
+            Eddie van der Meer & Main Theme Slow [Log Horizon] \\
+            \hline
+        \end{tabulary}
+    \caption{\url{https://open.spotify.com/playlist/2LxN8uMTPnLc7iPFTs4rNW}}
+    \label{fig:steins}
+    \end{figure}
+\end{center}
+
+\paragraph{Generating a playlist from a Brazilian song results in a fairly diverse and localised playlist, however some English songs are able to make it into the playlist.
+Then it returns back to Portuguese, which implies that English songs are present and common in the foreign-language input playlists.}
+\[\{k = 20, \beta = 0.5, v = 1, \Delta = 1\mu\}\]
+\begin{center}
+    \begin{figure}[H]
+        \begin{tabulary}{\linewidth}{|@{\makebox[2em][c]{\rownumber}}|L|L|} 
+            \hline
+            \textbf{Zeca Baleiro} & \textbf{Bandeira} \\ 
+            \hline
+            Detonautas Roque Clube & Olhos Certos \\
+            \hline
+            Charlie Brown Jr. & Zóio De Lula \\
+            \hline
+            Leoni & Garotos II - O Outro Lado \\
+            \hline
+            Vanessa Da Mata & Amado \\
+            \hline
+            Pitty & Equalize \\
+            \hline
+            Legião Urbana & Ainda É Cedo \\
+            \hline
+            Caetano Veloso, Maria Gadú & Nosso Estranho Amor \\
+            \hline
+            The Chainsmokers, ROZES & Roses (feat. ROZES) \\
+            \hline
+            Paula Mattos, Fernando Paloni & Que Sorte A Nossa \\
+            \hline
+        \end{tabulary}
+    \caption{\url{https://open.spotify.com/playlist/5iuJd0P5MCO3IToDCXcQ1x}}
+    \end{figure}
+\end{center}
+
+\section{Compute Time}
+The time taken to construct playlists using the case-based algorithm varied ranging from just a few minutes with playlists such as \textit{Gate of Steiner}\textsuperscript{\ref{fig:steins}}
+up to 20 minutes or more with 
+
+\section{Conclusion}
+
+
+\chapter{Future Work}
+\section{Further Testing and Development}
+Continued testing and work on areas such as:
+\begin{itemize}
+    \item Implementing the look-ahead factor described in Case-based Design\textsuperscript{\ref{casedesign}}
+    \item Adding artist genres as a feature in the Variety Function
+    \item Beginning from a list of seed songs and retrieving the combined top ranked playlists for Reuse
+    \item Adding an element of randomness when choosing the next song to be added to the list (weighted on ranking or rating of each prospective track)
+    \item Enhancing similarity-based generation with track feature analysis
+\end{itemize}
+
+\section{Surveys}
+In this project I used my own intuition and reasoning when determining the strengths and weaknesses of the various playlist generation parameters.
+A way to improve this further would be to open the algorithms to the public and conduct surveys to get more opinions. Ultimately, people's tastes in music
+are subjective, and some may prefer any of the given options rather than simply the most popular, and the variety gives users a freedom of choice in
+determining the style of playlist they desire, in contrast to many services which tend to be a simple button.
 
 \section{Additional Algorithms}
 Other styles of algorithms such as machine learning approaches could be explored and compared to the case-based configurations, taking the input playlists as the training set.
 
-\section{Web Application} \label{chap:webapp}
+\section{Addressing Limitations}
+The song\textsuperscript{\ref{section:limsongs}} and personalisation\textsuperscript{\ref{section:limpersonalisation}} limitations detailed earlier could be solved or mitigated with further development.
+By querying a different service which offers more recent playlists, the limitation in song output would be solved.
+Personalisation would require the analysis of at least the user's account for user-song recommendation, and more users for user-user recommendation,
+and could be implemented with Spotify or alternatives.
+
+\section{Web Application}\label{chap:webapp}
 \subsection*{Current Implementation}
 \begin{figure}[H]
     \centering
@@ -315,7 +793,7 @@ Instead of developing a separate website that users have to travel to separately
 and would modify the Spotify web client, adding a tab, or simply as a popup like standard browser addons, allowing the user to do the same as above but be
 more convenient and even reading context from Spotify. The dataset and program could be downloaded with the addon, allowing local generation instead of pinging a server.
 
-\printbibliography
+\printbibliography{}
 
 \chapter*{Reference Links}
 \normalsize{

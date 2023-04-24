@@ -5,7 +5,8 @@ from collections import Counter
 
 db_path = "Z:\\other\\spotify_backup.db"
 var_weight = 1
-beta = 0.25 # popularity weighting
+beta = 0.75 # popularity weighting
+stdN = 1
 
 def var_attr(l, gamma, delta):
     mul_attr = 1
@@ -70,7 +71,7 @@ def slim_var(song_features): # todo: fine-tuning deltas and gammas
     delta_diffs = [0.12559659911354276, 0.14243493379256492, 0.013280411877616508, 0.07070953181026222, 0.07261811636756003]
     gammas = [3, 3, 3, 3, 3]
     feature_list = np.array(song_features).transpose()
-    total_attrs = [var_attr(feature_list[i], gammas[i], delta_diffs[i]*2) for i in range(len(gammas))]
+    total_attrs = [var_attr(feature_list[i], gammas[i], delta_diffs[i]*stdN) for i in range(len(gammas))]
     total = 1
     for attr in total_attrs:
         total *= attr
@@ -156,7 +157,13 @@ def main(seed, N=10, k=20):
     # print(fpt)
 
     with Pool(32) as p:
-        t2, t3 = p.starmap(batch_rel, [[0,fpt,seed], [1,fat,seed]])
+        # t2, t3 = p.starmap(batch_rel, [[0,fpt,seed], [1,fat,seed]])
+        t2 = {}
+        t3 = {}
+        if len(fpt) > 0:
+            t2 = p.apply_async(batch_rel, [0,fpt,seed]).get()
+        if len(fat) > 0:
+            t3 = p.apply_async(batch_rel, [1,fat,seed]).get()
         p.close()
         p.join()
 
@@ -269,8 +276,9 @@ def solo(s="", N=10, k=20):
         while True:
             print("Enter song name:", end=" ")
             title = input()
-            query = cur.execute(f"SELECT track_uri, track_name, artist_name FROM tracks WHERE song_name LIKE '%{title}%' LIMIT 20;").fetchall()
-            print("Select by index:", "\n".join([s for s in enumerate(query)]))
+            query = cur.execute(f"SELECT track_uri, track_name, artist_name FROM tracks WHERE track_name LIKE '%{title}%' LIMIT 20;").fetchall()
+            print("\n".join([f"{s[0]} - {s[1]}" for s in enumerate(query)]))
+            print("Select by index:", end=" ")
             index = int(input())
             if index == -1:
                 continue
@@ -282,12 +290,12 @@ def solo(s="", N=10, k=20):
 
 if __name__ == "__main__":
 
-    # print(main("spotify:track:4aVuWgvD0X63hcOCnZtNFA"))
-
-    solo("spotify:track:4aVuWgvD0X63hcOCnZtNFA", k=20) 
+    # solo(k=50)
+    solo(s="spotify:track:1R2SZUOGJqqBiLuvwKOT2Y", k=20) 
 
     # Defaults
     # N = 10
     # k = 20
     # popularity (beta) = 0.5
     # variety_weight = 1
+    # stdN = 1
